@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المنصة الذكية للتقييم البديل – منى مصطفى</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #5b4fcf;
+    --primary-light: #8b80e8;
+    --primary-dark: #3d34a0;
+    --accent: #e8609a;
+    --accent2: #f59e42;
+    --bg: #faf9ff;
+    --card: #ffffff;
+    --text: #1e1b3a;
+    --text-muted: #6b6892;
+    --border: #e8e4fc;
+    --success: #10b981;
+    --radius: 16px;
+    --shadow: 0 2px 18px rgba(91,79,207,0.07);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Tajawal', 'Segoe UI', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    direction: rtl;
+  }
+  body.lang-en { direction: ltr; }
+  body.lang-he { direction: rtl; }
+
+  /* ── LANG BAR ── */
+  .lang-bar {
+    background: var(--primary-dark);
+    padding: 9px 24px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  .lang-bar button {
+    background: rgba(255,255,255,0.12);
+    border: 1.5px solid rgba(255,255,255,0.35);
+    color: #fff;
+    border-radius: 20px;
+    padding: 5px 16px;
+    font-size: 13px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .lang-bar button.active, .lang-bar button:hover {
+    background: #fff;
+    color: var(--primary);
+    border-color: #fff;
+    font-weight: 700;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #6a5fd8 0%, #9b91e8 50%, #d49bc4 100%);
+    color: white;
+    padding: 18px 24px 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  .school-logo-area { margin-bottom: 20px; position: relative; z-index: 1; }
+  .school-logo-preview {
+    width: 88px; height: 88px;
+    border-radius: 50%;
+    object-fit: contain;
+    background: rgba(255,255,255,0.92);
+    border: 3px solid rgba(255,255,255,0.8);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+    display: none;
+    margin: 0 auto 10px;
+  }
+  .logo-upload-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.18);
+    border: 1.5px dashed rgba(255,255,255,0.65);
+    color: #fff; border-radius: 12px;
+    padding: 8px 18px; font-size: 13px;
+    cursor: pointer; transition: all 0.2s;
+    font-family: inherit;
+  }
+  .logo-upload-btn:hover { background: rgba(255,255,255,0.28); }
+  #logoInput { display: none; }
+  .logo-remove-btn {
+    display: none;
+    background: rgba(255,80,80,0.28);
+    border: none; color: #fff; border-radius: 8px;
+    padding: 4px 12px; font-size: 12px;
+    cursor: pointer; margin-top: 6px; font-family: inherit;
+  }
+
+  .header-platform-name {
+    font-family: 'Amiri', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    line-height: 1.25;
+    margin-bottom: 6px;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.22);
+    position: relative; z-index: 1;
+  }
+  .header-owner {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    opacity: 0.92;
+    margin-bottom: 16px;
+    letter-spacing: 0.3px;
+    position: relative; z-index: 1;
+  }
+  .header-divider {
+    width: 60px; height: 3px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 3px;
+    margin: 14px auto 18px;
+  }
+  .header-welcome {
+    font-size: 1.05rem;
+    line-height: 1.85;
+    opacity: 0.93;
+    position: relative; z-index: 1;
+    max-width: 540px;
+    margin: 0 auto;
+  }
+
+  /* ── MAIN ── */
+  main { max-width: 760px; margin: 0 auto; padding: 28px 16px 70px; }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 1rem; font-weight: 800;
+    color: var(--primary); margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .card-title::before {
+    content: '';
+    display: inline-block;
+    width: 5px; height: 22px;
+    background: linear-gradient(180deg, var(--primary), var(--accent));
+    border-radius: 3px; flex-shrink: 0;
+  }
+
+  /* ── FORM ── */
+  label { font-size: 0.88rem; color: var(--text-muted); display: block; margin-bottom: 6px; font-weight: 500; }
+  input[type=text], select, textarea {
+    width: 100%; border: 1.5px solid var(--border);
+    border-radius: 11px; padding: 10px 14px;
+    font-size: 0.95rem; color: var(--text);
+    background: var(--bg); transition: border 0.2s;
+    outline: none; font-family: inherit;
+  }
+  input[type=text]:focus, select:focus, textarea:focus {
+    border-color: var(--primary); background: #fff;
+  }
+  textarea { resize: vertical; min-height: 80px; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media(max-width:560px){ .grid-2 { grid-template-columns: 1fr; } }
+
+  /* ── PILLS ── */
+  .pill-group { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    border: 1.5px solid var(--border); border-radius: 24px;
+    padding: 7px 16px; font-size: 0.88rem;
+    cursor: pointer; background: var(--bg);
+    color: var(--text); transition: all 0.18s;
+    user-select: none; font-family: inherit; font-weight: 500;
+  }
+  .pill:hover { border-color: var(--primary-light); background: #eeebff; }
+  .pill.selected {
+    background: var(--primary); color: white;
+    border-color: var(--primary); font-weight: 700;
+  }
+  .pill input { display: none; }
+
+  /* ── FILE UPLOAD ── */
+  .file-upload-area {
+    border: 2px dashed var(--border); border-radius: 12px;
+    padding: 22px; text-align: center; cursor: pointer;
+    transition: all 0.2s; background: var(--bg);
+  }
+  .file-upload-area:hover { border-color: var(--primary); background: #eeebff; }
+  .file-upload-area .up-icon { font-size: 2.2rem; margin-bottom: 8px; }
+  .file-upload-area p { font-size: 0.88rem; color: var(--text-muted); }
+  .file-upload-area .ftypes { font-size: 0.78rem; color: var(--primary); margin-top: 4px; font-weight: 600; }
+  #sourceFileInput { display: none; }
+  .file-list { margin-top: 10px; }
+  .file-item {
+    display: flex; align-items: center; justify-content: space-between;
+    background: #eeebff; border-radius: 9px; padding: 8px 12px;
+    margin-top: 6px; font-size: 0.85rem;
+  }
+  .file-item .fname { color: var(--primary); font-weight: 600; }
+  .file-item .rm-file {
+    background: none; border: none; color: #e74c3c;
+    cursor: pointer; font-size: 1rem; padding: 0 4px;
+  }
+
+  /* ── TEXT PASTE AREA ── */
+  .paste-area-label {
+    font-size: 0.88rem; color: var(--text-muted);
+    font-weight: 600; margin: 14px 0 6px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .paste-area-label span { color: var(--primary); }
+
+  /* ── SIMULATION ── */
+  .sim-toggle {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: #eeebff; border-radius: 12px;
+    padding: 14px 18px; margin-top: 12px;
+    cursor: pointer; border: 1.5px solid transparent;
+    transition: all 0.18s;
+  }
+  .sim-toggle:hover { border-color: var(--primary); }
+  .sim-toggle input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--primary); flex-shrink: 0; margin-top: 2px; }
+  .sim-toggle label { cursor: pointer; margin: 0; font-size: 0.93rem; color: var(--text); font-weight: 600; }
+  .sim-desc { font-size: 0.8rem; color: var(--text-muted); margin-top: 3px; }
+  .sim-types { display: none; margin-top: 12px; }
+  .sim-types.active { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  /* ── BUTTONS ── */
+  .btn-primary {
+    display: block; width: 100%;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white; border: none; border-radius: 13px;
+    padding: 16px; font-size: 1.08rem; font-weight: 800;
+    cursor: pointer; transition: all 0.2s;
+    font-family: inherit; letter-spacing: 0.3px;
+  }
+  .btn-primary:hover { opacity: 0.91; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(91,79,207,0.3); }
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: white; color: var(--primary);
+    border: 1.5px solid var(--primary); border-radius: 10px;
+    padding: 9px 18px; font-size: 0.9rem; font-weight: 700;
+    cursor: pointer; transition: all 0.18s; font-family: inherit;
+  }
+  .btn-secondary:hover { background: var(--primary); color: white; }
+
+  /* ── RESULT ── */
+  #promptResult { display: none; }
+  .prompt-box {
+    background: #1a1830; color: #cdd6f4;
+    border-radius: 12px; padding: 20px;
+    font-size: 0.87rem; line-height: 1.85;
+    white-space: pre-wrap; direction: rtl; text-align: right;
+    max-height: 420px; overflow-y: auto;
+    font-family: 'Tajawal', monospace;
+  }
+  body.lang-en .prompt-box { direction: ltr; text-align: left; }
+  .action-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .ai-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; align-items: center; }
+  .ai-link {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--bg); border: 1.5px solid var(--border);
+    border-radius: 20px; padding: 6px 14px;
+    font-size: 0.83rem; color: var(--text);
+    text-decoration: none; transition: all 0.18s; font-family: inherit;
+  }
+  .ai-link:hover { border-color: var(--primary); color: var(--primary); background: #eeebff; }
+  .share-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .section-divider { border: none; border-top: 1.5px dashed var(--border); margin: 14px 0 18px; }
+
+  /* ── TOAST ── */
+  #toast {
+    position: fixed; bottom: 28px; left: 50%;
+    transform: translateX(-50%) translateY(40px);
+    background: var(--primary); color: white;
+    padding: 12px 28px; border-radius: 30px;
+    font-size: 0.9rem; font-weight: 700;
+    opacity: 0; transition: all 0.3s;
+    z-index: 9999; pointer-events: none; font-family: inherit;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── QR ── */
+  #qrArea { text-align: center; margin-top: 16px; }
+  #qrcode img, #qrcode canvas { margin: 0 auto; }
+
+  /* ── HEADER LOGOS LAYOUT ── */
+  /* ── HEADER LOGO CENTER ── */
+  .header-logo-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 14px;
+    position: relative;
+    z-index: 2;
+  }
+  .header-logo-muna {
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid rgba(255,255,255,0.98);
+    box-shadow: 0 0 0 8px rgba(255,255,255,0.22), 0 12px 40px rgba(0,0,0,0.28);
+    display: block;
+    margin: 0 auto;
+    transition: transform 0.3s;
+  }
+  .header-logo-muna:hover { transform: scale(1.04); }
+
+  /* ── HEADER SCHOOL LOGO ROW ── */
+  .header-school-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 20px;
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 2;
+    min-height: 56px;
+  }
+  .header-logo-placeholder {
+    width: 56px; height: 56px;
+    flex-shrink: 0;
+    visibility: hidden;
+  }
+  .school-logo-area {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .school-logo-preview {
+    width: 76px; height: 76px;
+    border-radius: 50%;
+    object-fit: contain;
+    background: rgba(255,255,255,0.92);
+    border: 3px solid rgba(255,255,255,0.8);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    display: none;
+  }
+  .logo-upload-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: rgba(255,255,255,0.18);
+    border: 1.5px dashed rgba(255,255,255,0.65);
+    color: #fff; border-radius: 10px;
+    padding: 5px 11px; font-size: 11px;
+    cursor: pointer; transition: all 0.2s;
+    font-family: inherit; white-space: nowrap;
+  }
+  .logo-upload-btn:hover { background: rgba(255,255,255,0.28); }
+  #logoInput { display: none; }
+  .logo-remove-btn {
+    display: none;
+    background: rgba(255,80,80,0.28);
+    border: none; color: #fff; border-radius: 7px;
+    padding: 3px 10px; font-size: 11px;
+    cursor: pointer; font-family: inherit;
+  }
+
+  /* ── DECORATIVE STARS in header ── */
+  .star { position: absolute; opacity: 0.15; font-size: 1.4rem; pointer-events: none; }
+</style>
+</head>
+<body class="lang-ar">
+
+<div class="lang-bar">
+  <button class="active" onclick="setLang('ar')" id="btn-ar">🌙 عربية</button>
+  <button onclick="setLang('he')" id="btn-he">✡ עברית</button>
+  <button onclick="setLang('en')" id="btn-en">🔤 English</button>
+</div>
+
+<header>
+  <span class="star" style="top:14%;right:8%">✦</span>
+  <span class="star" style="top:60%;left:6%">✦</span>
+  <span class="star" style="top:30%;left:14%">✧</span>
+  <span class="star" style="top:75%;right:12%">✧</span>
+
+  <!-- School logo row: school logo on right, empty placeholder on left -->
+  <div class="header-school-row">
+    <div class="school-logo-area">
+      <img id="schoolLogoPreview" class="school-logo-preview" src="" alt="شعار المدرسة">
+      <label for="logoInput" class="logo-upload-btn" id="logoUploadLabel">
+        📷 <span data-t="uploadLogo">رفع شعار المدرسة</span>
+      </label>
+      <input type="file" id="logoInput" accept="image/*">
+      <button class="logo-remove-btn" id="logoRemoveBtn" onclick="removeLogo()">✕ <span data-t="removeLogo">إزالة الشعار</span></button>
+    </div>
+  </div>
+
+  <!-- Muna's personal logo — centered, large, prominent -->
+  <div class="header-logo-center">
+    <img src="https://i.postimg.cc/SNgVgv8L/my-new-icon.png"
+         class="header-logo-muna"
+         alt="شعار منى مصطفى"
+         onerror="this.style.display='none'">
+  </div>
+
+  <h1 class="header-platform-name" data-t="platformTitle">المنصة الذكية للتقييم البديل</h1>
+  <p class="header-owner" data-t="platformOwner">موقع خاص بالمعلمة منى مصطفى</p>
+  <div class="header-divider"></div>
+  <p class="header-welcome" data-t="welcomeText">أهلاً وسهلاً معلمينا الأعزاء 💗<br>دعونا نبني معاً مهمة تقييم بديل رائعة لطلابكم!</p>
+</header>
+
+<main>
+
+  <!-- Teacher Info -->
+  <div class="card">
+    <div class="card-title" data-t="teacherInfo">معلومات المعلم</div>
+    <div class="grid-2">
+      <div>
+        <label data-t="teacherName">اسم المعلم / المعلمة</label>
+        <input type="text" id="teacherName" data-ph="teacherNamePh">
+      </div>
+      <div>
+        <label data-t="gradeLabel">الصف الدراسي</label>
+        <div class="pill-group" id="gradeGroup">
+          <label class="pill"><input type="radio" name="grade" value="رابع"><span data-t="g4">رابع</span></label>
+          <label class="pill"><input type="radio" name="grade" value="خامس"><span data-t="g5">خامس</span></label>
+          <label class="pill"><input type="radio" name="grade" value="سادس"><span data-t="g6">سادس</span></label>
+          <label class="pill"><input type="radio" name="grade" value="سابع"><span data-t="g7">سابع</span></label>
+          <label class="pill"><input type="radio" name="grade" value="ثامن"><span data-t="g8">ثامن</span></label>
+          <label class="pill"><input type="radio" name="grade" value="تاسع"><span data-t="g9">تاسع</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Subject & Topic -->
+  <div class="card">
+    <div class="card-title" data-t="subjectTitle">المادة والموضوع</div>
+    <div class="grid-2" style="margin-bottom:14px">
+      <div>
+        <label data-t="subjectLabel">المادة الدراسية</label>
+        <div class="pill-group" id="subjectGroup">
+          <label class="pill"><input type="radio" name="subj" value="عربية">🌙 <span data-t="sAr">عربية</span></label>
+          <label class="pill"><input type="radio" name="subj" value="עברית">✡ <span data-t="sHe">עברית</span></label>
+          <label class="pill"><input type="radio" name="subj" value="English">🔤 <span>English</span></label>
+          <label class="pill"><input type="radio" name="subj" value="رياضيات">📐 <span data-t="sMath">رياضيات</span></label>
+          <label class="pill"><input type="radio" name="subj" value="فيزياء">⚡ <span data-t="sPhys">فيزياء</span></label>
+          <label class="pill"><input type="radio" name="subj" value="كيمياء">🧪 <span data-t="sChem">كيمياء</span></label>
+          <label class="pill"><input type="radio" name="subj" value="بيولوجيا">🌿 <span data-t="sBio">بيولوجيا</span></label>
+          <label class="pill"><input type="radio" name="subj" value="تاريخ">📜 <span data-t="sHist">تاريخ</span></label>
+          <label class="pill"><input type="radio" name="subj" value="مدنيات">🏛 <span data-t="sCiv">مدنيات</span></label>
+          <label class="pill"><input type="radio" name="subj" value="جغرافيا">🗺 <span data-t="sGeo">جغرافيا</span></label>
+          <label class="pill"><input type="radio" name="subj" value="الدين">☪ <span data-t="sRel">الدين</span></label>
+          <label class="pill"><input type="radio" name="subj" value="علوم">🔭 <span data-t="sSci">علوم</span></label>
+        </div>
+      </div>
+      <div>
+        <label data-t="topicLabel">الموضوع التعليمي للمهمة</label>
+        <textarea id="topicInput" rows="3" data-ph="topicPh"></textarea>
+      </div>
+    </div>
+
+    <!-- Source Materials -->
+    <hr class="section-divider">
+    <div style="font-weight:800; color:var(--primary); font-size:0.95rem; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+      📁 <span data-t="sourceFilesTitle">المواد المرجعية (اختياري)</span>
+    </div>
+    <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:12px;" data-t="sourceFilesDesc">يمكنك رفع ملفات Word أو PDF، أو كتابة/لصق محتوى نصي مباشرة، أو كليهما معاً</p>
+
+    <div class="file-upload-area" onclick="document.getElementById('sourceFileInput').click()">
+      <div class="up-icon">📄</div>
+      <p data-t="dropFiles">اسحب الملفات هنا أو انقر للاختيار</p>
+      <div class="ftypes">PDF • DOCX • DOC • TXT</div>
+    </div>
+    <input type="file" id="sourceFileInput" accept=".pdf,.doc,.docx,.txt" multiple>
+    <div class="file-list" id="fileList"></div>
+
+    <div class="paste-area-label">
+      ✏️ <span data-t="pasteLabel">أو اكتب / الصق المحتوى المرجعي مباشرة:</span>
+    </div>
+    <textarea id="pasteContent" rows="4" data-ph="pastePh" style="direction:rtl;"></textarea>
+  </div>
+
+  <!-- Thinking Level -->
+  <div class="card">
+    <div class="card-title" data-t="thinkingTitle">مستوى التفكير</div>
+    <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:10px;" data-t="thinkingNote">يمكن اختيار أكثر من مستوى</p>
+    <div class="pill-group">
+      <label class="pill"><input type="checkbox" name="think" value="تذكر">🧠 <span data-t="t1">تذكر</span></label>
+      <label class="pill"><input type="checkbox" name="think" value="فهم">💡 <span data-t="t2">فهم</span></label>
+      <label class="pill"><input type="checkbox" name="think" value="تطبيق">🔧 <span data-t="t3">تطبيق</span></label>
+      <label class="pill"><input type="checkbox" name="think" value="تحليل">🔍 <span data-t="t4">تحليل</span></label>
+      <label class="pill"><input type="checkbox" name="think" value="تقييم">⚖ <span data-t="t5">تقييم</span></label>
+      <label class="pill"><input type="checkbox" name="think" value="إبداع">🎨 <span data-t="t6">إبداع</span></label>
+    </div>
+  </div>
+
+  <!-- Assessment Type -->
+  <div class="card">
+    <div class="card-title" data-t="assessType">نوع التقييم البديل</div>
+    <div class="pill-group" id="typeGroup">
+      <label class="pill"><input type="radio" name="atype" value="worksheet">📄 <span data-t="a1">ورقة عمل</span></label>
+      <label class="pill"><input type="radio" name="atype" value="model">🧱 <span data-t="a2">بناء مجسم</span></label>
+      <label class="pill"><input type="radio" name="atype" value="presentation">🎤 <span data-t="a3">تقديم وعرض</span></label>
+      <label class="pill"><input type="radio" name="atype" value="experiment">🔬 <span data-t="a4">تجربة علمية</span></label>
+      <label class="pill"><input type="radio" name="atype" value="research">📚 <span data-t="a5">بحث</span></label>
+      <label class="pill"><input type="radio" name="atype" value="poster">🖼 <span data-t="a6">عارضة</span></label>
+    </div>
+
+    <div id="simulationSection" style="display:none; margin-top:16px;">
+      <hr class="section-divider">
+      <div class="sim-toggle" id="simToggleBox">
+        <input type="checkbox" id="simCheck" onchange="onSimChange()">
+        <div style="flex:1; cursor:pointer;" onclick="document.getElementById('simCheck').click()">
+          <div style="font-size:0.93rem; color:var(--text); font-weight:700; pointer-events:none;" data-t="simLabel">دمج فعاليات تدريبية / محاكاة تفاعلية في الصفحة الناتجة</div>
+          <div class="sim-desc" data-t="simDesc" style="pointer-events:none;">سيُضاف طلب لإنشاء أنشطة تفاعلية مثل اختبارات ذاتية، سيناريوهات، أو ألعاب تعليمية</div>
+        </div>
+      </div>
+      <div class="sim-types" id="simTypes">
+        <label class="pill"><input type="checkbox" name="sim" value="selfQuiz">❓ <span data-t="sim1">اختبار ذاتي</span></label>
+        <label class="pill"><input type="checkbox" name="sim" value="scenario">🎭 <span data-t="sim2">سيناريو تفاعلي</span></label>
+        <label class="pill"><input type="checkbox" name="sim" value="game">🎮 <span data-t="sim3">لعبة تعليمية</span></label>
+        <label class="pill"><input type="checkbox" name="sim" value="dragdrop">🔀 <span data-t="sim4">سحب وإفلات</span></label>
+        <label class="pill"><input type="checkbox" name="sim" value="flashcards">🃏 <span data-t="sim5">بطاقات تعلم</span></label>
+        <label class="pill"><input type="checkbox" name="sim" value="timeline">📅 <span data-t="sim6">خط زمني</span></label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Prompt Language -->
+  <div class="card">
+    <div class="card-title" data-t="promptLang">لغة البرومبت</div>
+    <div class="pill-group">
+      <label class="pill"><input type="radio" name="promptlang" value="ar" checked>🌙 <span data-t="plAr">عربي</span></label>
+      <label class="pill"><input type="radio" name="promptlang" value="he">✡ <span data-t="plHe">עברית</span></label>
+      <label class="pill"><input type="radio" name="promptlang" value="en">🔤 <span data-t="plEn">English (أفضل لـ v0 / Bolt)</span></label>
+    </div>
+  </div>
+
+  <!-- Notes -->
+  <div class="card">
+    <div class="card-title" data-t="notesTitle">ملاحظات إضافية</div>
+    <textarea id="notesInput" rows="3" data-ph="notesPh"></textarea>
+  </div>
+
+  <button class="btn-primary" onclick="buildPrompt()">
+    ✨ <span data-t="buildBtn">ابنِ البرومبت الذكي لي</span>
+  </button>
+
+  <!-- Result -->
+  <div id="promptResult" class="card" style="margin-top:22px;">
+    <div class="card-title" data-t="resultTitle">⭐ البرومبت الذكي الجاهز</div>
+    <div id="promptText" class="prompt-box"></div>
+    <div class="action-row">
+      <button class="btn-secondary" onclick="copyPrompt()">📋 <span data-t="copyBtn">نسخ البرومبت</span></button>
+      <button class="btn-secondary" onclick="downloadPrompt()">⬇ <span data-t="downloadBtn">تحميل ملف الطالب</span></button>
+      <button class="btn-secondary" onclick="sharePrompt()">🔗 <span data-t="shareBtn">مشاركة مع الطلاب</span></button>
+    </div>
+    <div class="ai-links">
+      <span style="font-size:0.82rem;color:var(--text-muted);" data-t="sendTo">📍 انقل البرومبت إلى:</span>
+      <a class="ai-link" href="https://claude.ai" target="_blank">🤖 Claude AI</a>
+      <a class="ai-link" href="https://chat.openai.com" target="_blank">💬 ChatGPT</a>
+      <a class="ai-link" href="https://gemini.google.com" target="_blank">✨ Gemini</a>
+      <a class="ai-link" href="https://copilot.microsoft.com" target="_blank">🔷 Copilot</a>
+      <a class="ai-link" href="https://v0.dev" target="_blank">⚡ v0.dev</a>
+      <a class="ai-link" href="https://bolt.new" target="_blank">🔩 Bolt.new</a>
+    </div>
+    <div id="shareArea" style="display:none; margin-top:16px;">
+      <hr class="section-divider">
+      <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:10px;" data-t="shareTitle">مشاركة المهمة مع الطلاب</p>
+      <div class="share-row">
+        <button class="btn-secondary" onclick="shareVia('whatsapp')">💬 واتساب</button>
+        <button class="btn-secondary" onclick="shareVia('email')">📧 <span data-t="shareEmail">إيميل</span></button>
+        <button class="btn-secondary" onclick="shareVia('telegram')">✈️ تيليغرام</button>
+      </div>
+      <div id="qrArea" style="margin-top:16px;">
+        <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:8px;" data-t="qrTitle">امسح الـ QR لفتح المهمة مباشرة</p>
+        <div id="qrcode"></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+const MUNA_LOGO = 'https://i.postimg.cc/SNgVgv8L/my-new-icon.png';
+
+const T = {
+  ar: {
+    platformTitle:'المنصة الذكية للتقييم البديل',
+    platformOwner:'موقع خاص بالمعلمة منى مصطفى',
+    welcomeText:'أهلاً وسهلاً معلمينا الأعزاء 💗\nدعونا نبني معاً مهمة تقييم بديل رائعة لطلابكم!',
+    uploadLogo:'رفع شعار المدرسة', removeLogo:'إزالة الشعار',
+    teacherInfo:'معلومات المعلم', teacherName:'اسم المعلم / المعلمة', teacherNamePh:'اكتب اسمك هنا',
+    gradeLabel:'الصف الدراسي',
+    g4:'رابع',g5:'خامس',g6:'سادس',g7:'سابع',g8:'ثامن',g9:'تاسع',
+    subjectTitle:'المادة والموضوع', subjectLabel:'المادة الدراسية',
+    sAr:'عربية',sHe:'עברית',sMath:'رياضيات',sPhys:'فيزياء',sChem:'كيمياء',sBio:'بيولوجيا',sHist:'تاريخ',sCiv:'مدنيات',sGeo:'جغرافيا',sRel:'الدين',sSci:'علوم',
+    topicLabel:'الموضوع التعليمي', topicPh:'اكتب موضوع المهمة...',
+    sourceFilesTitle:'المواد المرجعية (اختياري)',
+    sourceFilesDesc:'يمكنك رفع ملفات Word أو PDF، أو كتابة/لصق محتوى نصي مباشرة، أو كليهما معاً',
+    dropFiles:'اسحب الملفات هنا أو انقر للاختيار',
+    pasteLabel:'أو اكتب / الصق المحتوى المرجعي مباشرة:', pastePh:'الصق هنا نصوصاً أو مواد دراسية تريد الاستناد إليها...',
+    thinkingTitle:'مستوى التفكير', thinkingNote:'يمكن اختيار أكثر من مستوى',
+    t1:'تذكر',t2:'فهم',t3:'تطبيق',t4:'تحليل',t5:'تقييم',t6:'إبداع',
+    assessType:'نوع التقييم البديل',
+    a1:'ورقة عمل',a2:'بناء مجسم',a3:'تقديم وعرض',a4:'تجربة علمية',a5:'بحث',a6:'عارضة',
+    simLabel:'دمج فعاليات تدريبية / محاكاة تفاعلية',
+    simDesc:'سيُضاف طلب لإنشاء أنشطة تفاعلية مثل اختبارات ذاتية، سيناريوهات، أو ألعاب تعليمية',
+    sim1:'اختبار ذاتي',sim2:'سيناريو تفاعلي',sim3:'لعبة تعليمية',sim4:'سحب وإفلات',sim5:'بطاقات تعلم',sim6:'خط زمني',
+    promptLang:'لغة البرومبت', plAr:'عربي',plHe:'עברית',plEn:'English (أفضل لـ v0 / Bolt)',
+    notesTitle:'ملاحظات إضافية', notesPh:'أي ملاحظات أو متطلبات إضافية...',
+    buildBtn:'ابنِ البرومبت الذكي لي',
+    resultTitle:'⭐ البرومبت الذكي الجاهز',
+    copyBtn:'نسخ البرومبت', downloadBtn:'تحميل ملف الطالب', shareBtn:'مشاركة مع الطلاب',
+    sendTo:'📍 انقل البرومبت إلى:',
+    shareTitle:'مشاركة المهمة مع الطلاب', shareEmail:'إيميل', qrTitle:'امسح الـ QR لفتح المهمة مباشرة',
+    copied:'تم النسخ بنجاح ✓', fillFields:'الرجاء ملء الحقول المطلوبة (الصف، المادة، الموضوع، نوع التقييم)',
+  },
+  he: {
+    platformTitle:'הפלטפורמה החכמה להערכה חלופית',
+    platformOwner:'אתר אישי של המורה מונא מוסטפא',
+    welcomeText:'ברוכים הבאים, מורים יקרים 💗\nבואו נבנה יחד מטלת הערכה חלופית מעולה לתלמידיכם!',
+    uploadLogo:'העלה לוגו בית ספר', removeLogo:'הסר לוגו',
+    teacherInfo:'פרטי המורה', teacherName:'שם המורה', teacherNamePh:'כתוב שם כאן',
+    gradeLabel:'כיתה',
+    g4:"ד'",g5:"ה'",g6:"ו'",g7:"ז'",g8:"ח'",g9:"ט'",
+    subjectTitle:'מקצוע ונושא', subjectLabel:'מקצוע',
+    sAr:'ערבית',sHe:'עברית',sMath:'מתמטיקה',sPhys:'פיזיקה',sChem:'כימיה',sBio:'ביולוגיה',sHist:'היסטוריה',sCiv:'אזרחות',sGeo:'גיאוגרפיה',sRel:'דת',sSci:'מדעים',
+    topicLabel:'נושא המטלה', topicPh:'כתוב את הנושא הלימודי...',
+    sourceFilesTitle:'חומרי עזר (אופציונלי)',
+    sourceFilesDesc:'ניתן להעלות קבצי Word או PDF, לכתוב/להדביק תוכן ישירות, או שניהם',
+    dropFiles:'גרור קבצים לכאן או לחץ לבחירה',
+    pasteLabel:'או כתוב / הדבק תוכן עזר ישירות:', pastePh:'הדבק כאן טקסטים או חומרי לימוד...',
+    thinkingTitle:'רמת חשיבה', thinkingNote:'ניתן לבחור יותר מרמה אחת',
+    t1:'זכירה',t2:'הבנה',t3:'יישום',t4:'ניתוח',t5:'הערכה',t6:'יצירה',
+    assessType:'סוג ההערכה החלופית',
+    a1:'דף עבודה',a2:'בניית מודל',a3:'הצגה',a4:'ניסוי מדעי',a5:'מחקר',a6:'תצוגה',
+    simLabel:'שלב פעילויות אינטראקטיביות / סימולציה',
+    simDesc:'יתווסף בקשה ליצירת פעילויות כבחנים עצמיים, תרחישים, או משחקים לימודיים',
+    sim1:'בוחן עצמי',sim2:'תרחיש',sim3:'משחק',sim4:'גרור ושחרר',sim5:'כרטיסיות',sim6:'ציר זמן',
+    promptLang:'שפת הפרומפט', plAr:'ערבית',plHe:'עברית',plEn:'English (מומלץ לـ v0 / Bolt)',
+    notesTitle:'הערות נוספות', notesPh:'כל הערה או דרישה נוספת...',
+    buildBtn:'בנה לי פרומפט חכם ✨',
+    resultTitle:'⭐ הפרומפט מוכן',
+    copyBtn:'העתק', downloadBtn:'הורד קובץ', shareBtn:'שתף',
+    sendTo:'📍 שלח פרומפט ל:',
+    shareTitle:'שיתוף עם תלמידים', shareEmail:'אימייל', qrTitle:'סרוק QR לפתיחת המטלה',
+    copied:'הועתק בהצלחה ✓', fillFields:'אנא מלא את השדות הנדרשים',
+  },
+  en: {
+    platformTitle:'Smart Alternative Assessment Platform',
+    platformOwner:'Personal site of Teacher Muna Mustafa',
+    welcomeText:"Welcome, dear teachers 💗\nLet's build an amazing alternative assessment task for your students together!",
+    uploadLogo:'Upload School Logo', removeLogo:'Remove Logo',
+    teacherInfo:'Teacher Information', teacherName:'Teacher Name', teacherNamePh:'Enter your name',
+    gradeLabel:'Grade',
+    g4:'4th',g5:'5th',g6:'6th',g7:'7th',g8:'8th',g9:'9th',
+    subjectTitle:'Subject & Topic', subjectLabel:'Subject',
+    sAr:'Arabic',sHe:'Hebrew',sMath:'Math',sPhys:'Physics',sChem:'Chemistry',sBio:'Biology',sHist:'History',sCiv:'Civics',sGeo:'Geography',sRel:'Religion',sSci:'Science',
+    topicLabel:'Educational Topic', topicPh:'Write the topic...',
+    sourceFilesTitle:'Reference Materials (optional)',
+    sourceFilesDesc:'Upload Word/PDF files, type/paste text content directly, or both',
+    dropFiles:'Drag files here or click to select',
+    pasteLabel:'Or type / paste reference content directly:', pastePh:'Paste texts or study materials here...',
+    thinkingTitle:'Thinking Level', thinkingNote:'Multiple levels can be selected',
+    t1:'Remember',t2:'Understand',t3:'Apply',t4:'Analyze',t5:'Evaluate',t6:'Create',
+    assessType:'Assessment Type',
+    a1:'Worksheet',a2:'3D Model',a3:'Presentation',a4:'Experiment',a5:'Research',a6:'Poster',
+    simLabel:'Include interactive simulations / training activities',
+    simDesc:'A request will be added for self-quizzes, scenarios, or educational games',
+    sim1:'Self Quiz',sim2:'Scenario',sim3:'Game',sim4:'Drag & Drop',sim5:'Flashcards',sim6:'Timeline',
+    promptLang:'Prompt Language', plAr:'Arabic',plHe:'Hebrew',plEn:'English (Best for v0 / Bolt)',
+    notesTitle:'Additional Notes', notesPh:'Any additional requirements...',
+    buildBtn:'Build My Smart Prompt ✨',
+    resultTitle:'⭐ Your Smart Prompt is Ready',
+    copyBtn:'Copy', downloadBtn:'Download', shareBtn:'Share',
+    sendTo:'📍 Send prompt to:',
+    shareTitle:'Share with Students', shareEmail:'Email', qrTitle:'Scan QR to open task',
+    copied:'Copied ✓', fillFields:'Please fill required fields (grade, subject, topic, type)',
+  }
+};
+
+let currentLang = 'ar';
+let schoolLogoBase64 = null;
+let uploadedFiles = [];
+
+function setLang(l) {
+  currentLang = l;
+  document.body.className = 'lang-' + l;
+  document.documentElement.lang = l;
+  document.documentElement.dir = l === 'en' ? 'ltr' : 'rtl';
+  ['ar','he','en'].forEach(x => document.getElementById('btn-'+x).classList.remove('active'));
+  document.getElementById('btn-'+l).classList.add('active');
+  applyTranslations();
+}
+
+function applyTranslations() {
+  const t = T[currentLang];
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const k = el.getAttribute('data-t');
+    if (!t[k]) return;
+    if (k === 'welcomeText') { el.innerHTML = t[k].replace('\n','<br>'); return; }
+    el.textContent = t[k];
+  });
+  document.querySelectorAll('[data-ph]').forEach(el => {
+    const k = el.getAttribute('data-ph');
+    if (t[k]) el.placeholder = t[k];
+  });
+  document.title = T[currentLang].platformTitle + ' – منى مصطفى';
+}
+
+// ── LOGO ──────────────────────────────────────────────────────────────────────
+document.getElementById('logoInput').addEventListener('change', function(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    schoolLogoBase64 = ev.target.result;
+    const p = document.getElementById('schoolLogoPreview');
+    p.src = schoolLogoBase64; p.style.display = 'block';
+    document.getElementById('logoRemoveBtn').style.display = 'inline-block';
+  };
+  reader.readAsDataURL(file);
+});
+function removeLogo() {
+  schoolLogoBase64 = null;
+  document.getElementById('schoolLogoPreview').style.display = 'none';
+  document.getElementById('logoRemoveBtn').style.display = 'none';
+  document.getElementById('logoInput').value = '';
+}
+
+// ── SOURCE FILES ───────────────────────────────────────────────────────────────
+document.getElementById('sourceFileInput').addEventListener('change', function(e) {
+  Array.from(e.target.files).forEach(f => { if (!uploadedFiles.find(x => x.name===f.name)) uploadedFiles.push(f); });
+  renderFiles();
+});
+function renderFiles() {
+  const list = document.getElementById('fileList'); list.innerHTML = '';
+  uploadedFiles.forEach((f,i) => {
+    const ext = f.name.split('.').pop().toUpperCase();
+    const icon = ext==='PDF' ? '📕' : '📝';
+    list.innerHTML += '<div class="file-item"><span class="fname">' + icon + ' ' + f.name + ' <span style="color:var(--text-muted);font-size:0.75rem">(' + (f.size/1024).toFixed(0) + ' KB)</span></span><button class="rm-file" onclick="removeFile(' + i + ')">✕</button></div>';
+  });
+}
+function removeFile(i) { uploadedFiles.splice(i,1); renderFiles(); }
+
+// ── PILLS ──────────────────────────────────────────────────────────────────────
+document.addEventListener('click', function(e) {
+  const pill = e.target.closest('.pill'); if (!pill) return;
+  const input = pill.querySelector('input'); if (!input) return;
+  if (input.type === 'radio') {
+    const name = input.name;
+    document.querySelectorAll('input[name="' + name + '"]').forEach(r => r.closest('.pill').classList.remove('selected'));
+    input.checked = true; pill.classList.add('selected');
+    if (name === 'atype') document.getElementById('simulationSection').style.display = input.value==='worksheet' ? 'block' : 'none';
+  } else {
+    input.checked = !input.checked;
+    pill.classList.toggle('selected', input.checked);
+  }
+});
+
+function onSimChange() {
+  const c = document.getElementById('simCheck');
+  document.getElementById('simTypes').classList.toggle('active', c.checked);
+}
+
+// ── SELF-ASSESSMENT BLOCK ─────────────────────────────────────────────────────
+const selfAssessBlock = {
+  ar: '\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n\u2b50 \u0642\u0633\u0645 \u0627\u0644\u062a\u0642\u064a\u064a\u0645 \u0627\u0644\u0630\u0627\u062a\u064a \u0644\u0644\u0637\u0627\u0644\u0628 (\u0645\u0637\u0644\u0648\u0628 \u0641\u064a \u0643\u0644 \u0645\u0647\u0645\u0629)\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n\u0641\u064a \u0646\u0647\u0627\u064a\u0629 \u0627\u0644\u0635\u0641\u062d\u0629 \u0627\u0644\u062a\u0641\u0627\u0639\u0644\u064a\u0629 \u0623\u0636\u0641 \u0627\u0644\u0642\u0633\u0645\u064a\u0646 \u0627\u0644\u062a\u0627\u0644\u064a\u064a\u0646:\n\n1\ufe0f\u20e3 \u0627\u0644\u062a\u0642\u064a\u064a\u0645 \u0627\u0644\u0630\u0627\u062a\u064a:\n- \u0642\u0633\u0645 \u062a\u0641\u0627\u0639\u0644\u064a \u064a\u0637\u0631\u062d \u0639\u0644\u0649 \u0627\u0644\u0637\u0627\u0644\u0628 4-5 \u0623\u0633\u0626\u0644\u0629 \u062a\u0642\u064a\u064a\u0645 \u0630\u0627\u062a\u064a \u0645\u0631\u062a\u0628\u0637\u0629 \u0628\u0645\u062d\u062a\u0648\u0649 \u0627\u0644\u0645\u0647\u0645\u0629\n- \u0627\u0633\u062a\u062e\u062f\u0645 \u0645\u0642\u064a\u0627\u0633 \u0625\u064a\u0645\u0648\u062c\u064a (\ud83d\ude15 / \ud83d\ude10 / \ud83d\ude0a / \ud83e\udd29)\n- \u0623\u0638\u0647\u0631 \u0631\u0633\u0627\u0644\u0629 \u062a\u0634\u062c\u064a\u0639\u064a\u0629 \u0645\u062e\u0635\u0635\u0629 \u0628\u0646\u0627\u0621\u064b \u0639\u0644\u0649 \u0625\u062c\u0627\u0628\u0627\u062a \u0627\u0644\u0637\u0627\u0644\u0628\n- \u062d\u0642\u0644 "\u0627\u0633\u0645 \u0627\u0644\u0637\u0627\u0644\u0628" \u064a\u0645\u0644\u0623\u0647 \u0628\u0646\u0641\u0633\u0647\n\n2\ufe0f\u20e3 \u0628\u0637\u0627\u0642\u0629 \u0627\u0644\u062a\u0642\u064a\u064a\u0645 \u0627\u0644\u062a\u0634\u062c\u064a\u0639\u064a\u0629:\n- \u0632\u0631 "\u0627\u062d\u0635\u0644 \u0639\u0644\u0649 \u0628\u0637\u0627\u0642\u062a\u0643 \u0627\u0644\u062a\u0634\u062c\u064a\u0639\u064a\u0629 \ud83c\udfc5"\n- \u0628\u0637\u0627\u0642\u0629 HTML/CSS \u062c\u0645\u064a\u0644\u0629 \u062a\u062d\u062a\u0648\u064a \u0639\u0644\u0649:\n  \u2022 \u0627\u0633\u0645 \u0627\u0644\u0637\u0627\u0644\u0628 + \u0627\u0644\u0635\u0641 + \u0627\u0644\u0645\u0627\u062f\u0629 + \u0627\u0633\u0645 \u0627\u0644\u0645\u0639\u0644\u0645\u0629\n  \u2022 \u0639\u0628\u0627\u0631\u0629 \u062a\u0634\u062c\u064a\u0639\u064a\u0629 \u0645\u062e\u0635\u0635\u0629 \u062d\u0633\u0628 \u0646\u062a\u064a\u062c\u0629 \u0627\u0644\u062a\u0642\u064a\u064a\u0645\n  \u2022 \u062a\u0635\u0645\u064a\u0645 \u062c\u0630\u0627\u0628 \u0628\u0646\u062c\u0648\u0645 \u0648\u0623\u0644\u0648\u0627\u0646 \u062f\u0627\u0641\u0626\u0629\n- \u0632\u0631 "\u062a\u062d\u0645\u064a\u0644 \u0627\u0644\u0628\u0637\u0627\u0642\u0629" (\u0646\u0627\u0641\u0630\u0629 \u0637\u0628\u0627\u0639\u0629 \u0644\u0644\u0628\u0637\u0627\u0642\u0629 \u0641\u0642\u0637)',
+
+  he: '\n\u2b50 \u05e7\u05d8\u05e2 \u05d4\u05e2\u05e8\u05db\u05d4 \u05e2\u05e6\u05de\u05d9\u05ea \u05e9\u05dc \u05d4\u05ea\u05dc\u05de\u05d9\u05d3 (\u05e0\u05d3\u05e8\u05e9 \u05d1\u05db\u05dc \u05de\u05d8\u05dc\u05d4)\n\n\u05d1\u05e1\u05d5\u05e3 \u05d4\u05d3\u05e3 \u05d4\u05d5\u05e1\u05e3:\n1\ufe0f\u20e3 \u05d4\u05e2\u05e8\u05db\u05d4 \u05e2\u05e6\u05de\u05d9\u05ea: 4-5 \u05e9\u05d0\u05dc\u05d5\u05ea, \u05de\u05d3\u05d3 \u05d0\u05de\u05d5\u05d2\u05f3\u05d9, \u05d4\u05d5\u05d3\u05e2\u05ea \u05e2\u05d9\u05d3\u05d5\u05d3 \u05de\u05d5\u05ea\u05d0\u05de\u05ea, \u05e9\u05d3\u05d4 \u05e9\u05dd \u05d4\u05ea\u05dc\u05de\u05d9\u05d3\n2\ufe0f\u20e3 \u05db\u05e8\u05d8\u05d9\u05e1 \u05e2\u05d9\u05d3\u05d5\u05d3 \u05dc\u05d4\u05d5\u05e8\u05d3\u05d4: \u05db\u05e4\u05ea\u05d5\u05e8 \u05e7\u05d1\u05dc \u05db\u05e8\u05d8\u05d9\u05e1 \u05e2\u05d9\u05d3\u05d5\u05d3, HTML/CSS \u05d9\u05e4\u05d4 \u05e2\u05dd \u05e9\u05dd \u05d4\u05ea\u05dc\u05de\u05d9\u05d3+\u05db\u05d9\u05ea\u05d4+\u05de\u05e7\u05e6\u05d5\u05e2+\u05de\u05e9\u05e4\u05d8 \u05e2\u05d9\u05d3\u05d5\u05d3, \u05db\u05e4\u05ea\u05d5\u05e8 \u05d4\u05d3\u05e4\u05e1\u05d4',
+
+  en: '\n\u2b50 Student Self-Assessment Section (required in every task)\n\nAt the END of the page add:\n1\ufe0f\u20e3 Self-Assessment: 4-5 questions, emoji scale, personalized encouragement, student name field\n2\ufe0f\u20e3 Downloadable Encouragement Card: button "Get Your Card", beautiful HTML/CSS card with student name, grade, subject, teacher name, custom message, print/download button'
+};
+
+// ── WORKSHEET BLOCK ───────────────────────────────────────────────────────────
+function getWorksheetBlock(lang) {
+  if (lang === 'he') {
+    return '\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n\ud83d\udcc4 \u05d3\u05e8\u05d9\u05e9\u05d5\u05ea \u05d3\u05e3 \u05e2\u05d1\u05d5\u05d3\u05d4 \u05d0\u05d9\u05e0\u05d8\u05e8\u05d0\u05e7\u05d8\u05d9\u05d1\u05d9 (\u05d7\u05d5\u05d1\u05d4)\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n\u2714 20+ \u05e9\u05d0\u05dc\u05d5\u05ea: 6 \u05e8\u05d1-\u05d1\u05e8\u05d9\u05e8\u05d4 + 4 \u05e0\u05db\u05d5\u05df/\u05dc\u05d0 \u05e0\u05db\u05d5\u05df + 3 \u05d2\u05e8\u05d9\u05e8\u05d4/\u05e9\u05d7\u05e8\u05d5\u05e8 + 2 \u05d4\u05ea\u05d0\u05de\u05d4 + 5 \u05e4\u05ea\u05d5\u05d7\u05d5\u05ea\n\u2714 \u05e1\u05d4"\u05db 100 \u05e0\u05e7\u05d5\u05d3\u05d5\u05ea, \u05e6\u05d9\u05d5\u05df \u05d0\u05d5\u05d8\u05d5\u05de\u05d8\u05d9 + \u05de\u05e9\u05e4\u05d8 \u05e2\u05d9\u05d3\u05d5\u05d3 \u05de\u05d5\u05ea\u05d0\u05dd\n\u2714 \u05db\u05e4\u05ea\u05d5\u05e8 \u05e2\u05e8\u05d1\u05d5\u05d1 \u05e9\u05d0\u05dc\u05d5\u05ea + \u05d0\u05e4\u05e1\u05d5\u05e8 \u05e6\u05d9\u05d5\u05df (Fisher-Yates) \u05dc\u05dc\u05d0 \u05d8\u05e2\u05d9\u05e0\u05d4 \u05de\u05d7\u05d3\u05e9';
+  } else if (lang === 'en') {
+    return '\n=====================================\nINTERACTIVE WORKSHEET REQUIREMENTS\n=====================================\n\nMinimum 20 questions total:\n- Multiple Choice: 6 questions (4 options each, instant feedback)\n- True/False: 4 questions (instant feedback with explanation)\n- Drag & Drop Word Bank fill-in-blank: 3 questions\n- Matching/Pairing: 2 questions\n- Open short-answer (textarea): 5 questions\n\nScoring: Total = 100 marks, distributed proportionally\nShow auto-calculated score at end with personalized message:\n  90-100: Excellent! 🌟 | 75-89: Very Good! 💪 | 60-74: Good! 🎯 | below 60: Keep trying! 🌱\n\nRe-practice button (top & bottom): shuffle ALL questions, choices, word banks & reset score (Fisher-Yates) without page reload.';
+  } else {
+    return '\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n\ud83d\udcc4 \u0645\u062a\u0637\u0644\u0628\u0627\u062a \u0648\u0631\u0642\u0629 \u0627\u0644\u0639\u0645\u0644 \u0627\u0644\u062a\u0641\u0627\u0639\u0644\u064a\u0629 (\u0625\u0644\u0632\u0627\u0645\u064a\u0629)\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n\u0639\u062f\u062f \u0627\u0644\u0623\u0633\u0626\u0644\u0629 20 \u0639\u0644\u0649 \u0627\u0644\u0623\u0642\u0644:\n- \u0627\u062e\u062a\u064a\u0627\u0631 \u0645\u0646 \u0645\u062a\u0639\u062f\u062f: 6 \u0623\u0633\u0626\u0644\u0629 (4 \u062e\u064a\u0627\u0631\u0627\u062a, \u062a\u0635\u062d\u064a\u062d \u0641\u0648\u0631\u064a)\n- \u0635\u062d / \u062e\u0637\u0623: 4 \u0623\u0633\u0626\u0644\u0629 (\u062a\u0635\u062d\u064a\u062d \u0641\u0648\u0631\u064a \u0645\u0639 \u062a\u0648\u0636\u064a\u062d)\n- \u0633\u062d\u0628 \u0648\u0625\u0641\u0644\u0627\u062a \u0645\u0646 \u0635\u0646\u062f\u0648\u0642 \u0643\u0644\u0645\u0627\u062a: 3 \u0623\u0633\u0626\u0644\u0629\n- \u0631\u0628\u0637 / \u0645\u0637\u0627\u0628\u0642\u0629: 2 \u0623\u0633\u0626\u0644\u0629\n- \u0623\u0633\u0626\u0644\u0629 \u0645\u0641\u062a\u0648\u062d\u0629 \u0642\u0635\u064a\u0631\u0629: 5 \u0623\u0633\u0626\u0644\u0629\n\n\u0646\u0638\u0627\u0645 \u0627\u0644\u0639\u0644\u0627\u0645\u0627\u062a: \u0645\u062c\u0645\u0648\u0639 100 \u0639\u0644\u0627\u0645\u0629\n\u062c\u0645\u0644 \u062a\u0634\u062c\u064a\u0639\u064a\u0629: 90-100\u25c4\u0645\u0645\u062a\u0627\u0632 \ud83c\udf1f | 75-89\u25c4\u062c\u064a\u062f \u062c\u062f\u0627\u064b \ud83d\udcaa | 60-74\u25c4\u062c\u064a\u062f \ud83c\udfaf | \u0623\u0642\u0644\u25c4\u0644\u0627 \u062a\u0633\u062a\u0633\u0644\u0645 \ud83c\udf31\n\n\u0632\u0631 "\ud83d\udd00 \u062a\u062f\u0631\u0651\u0628 \u0645\u062c\u062f\u062f\u0627\u064b": \u062e\u0644\u0637 \u062c\u0645\u064a\u0639 \u0627\u0644\u0623\u0633\u0626\u0644\u0629 \u0648\u0627\u0644\u062e\u064a\u0627\u0631\u0627\u062a \u0648\u0635\u0646\u062f\u0648\u0642 \u0627\u0644\u0643\u0644\u0645\u0627\u062a \u0639\u0634\u0648\u0627\u0626\u064a\u0627\u064b (Fisher-Yates) \u062f\u0648\u0646 \u0625\u0639\u0627\u062f\u0629 \u062a\u062d\u0645\u064a\u0644 \u0627\u0644\u0635\u0641\u062d\u0629, \u0648\u0625\u0639\u0627\u062f\u0629 \u0636\u0628\u0637 \u0627\u0644\u0639\u0644\u0627\u0645\u0627\u062a \u0625\u0644\u0649 \u0627\u0644\u0635\u0641\u0631.';
+  }
+}
+
+// ── LOGO INSTRUCTION (pure text, no HTML tags inside JS strings) ──────────────
+function getLogoInstruction(lang, hasLogo, munaLogoUrl) {
+  if (lang === 'ar') {
+    if (hasLogo) {
+      return '- في رأس الصفحة: شريط أفقي يحتوي على:\n  • يسار (بارز، 90×90 بكسل، دائري): شعار منى مصطفى الشخصي — اجلب الصورة من الرابط: ' + munaLogoUrl + ' (حجم 80×80 بكسل، شكل دائري)\n  • وسط: عنوان الصفحة واسم المعلمة\n  • يمين: شعار المدرسة الذي رفعه المستخدم (base64، حجم 80×80 بكسل، شكل دائري)';
+    } else {
+      return '- في رأس الصفحة: شريط أفقي يحتوي على:\n  • يسار (بارز، 90×90 بكسل، دائري): شعار منى مصطفى الشخصي — اجلب الصورة من الرابط: ' + munaLogoUrl + ' (حجم 80×80 بكسل، شكل دائري)\n  • يمين العنوان واسم المعلمة\n  • لا تضع أي شعار أو placeholder في الجهة اليمنى';
+    }
+  } else if (lang === 'he') {
+    if (hasLogo) {
+      return '- בכותרת הדף: שורה אופקית עם:\n  • שמאל (בולט, 90×90px, עגול): לוגו מונא מוסטפא — טען מ: ' + munaLogoUrl + ' (80x80px, עגול)\n  • מרכז: כותרת הדף ושם המורה\n  • ימין: לוגו בית הספר שהועלה (base64, 80x80px, עגול)';
+    } else {
+      return '- בכותרת הדף: שורה אופקית עם:\n  • שמאל (בולט, 90×90px, עגול): לוגו מונא מוסטפא — טען מ: ' + munaLogoUrl + ' (80x80px, עגול)\n  • כותרת ושם המורה\n  • אין לוגו בית ספר בצד ימין';
+    }
+  } else {
+    if (hasLogo) {
+      return '- In the page header: a horizontal bar containing:\n  • LEFT (prominent, 90×90px, circular): Muna Mustafa personal logo — fetch from: ' + munaLogoUrl + ' (80x80px, circular)\n  • CENTER: page title and teacher name\n  • RIGHT: uploaded school logo (base64, 80x80px, circular)';
+    } else {
+      return '- In the page header: a horizontal bar with:\n  • LEFT (prominent, 90×90px, circular): Muna Mustafa personal logo — fetch from: ' + munaLogoUrl + ' (80x80px, circular)\n  • page title and teacher name\n  • No school logo or placeholder on the right';
+    }
+  }
+}
+
+// ── BUILD PROMPT ──────────────────────────────────────────────────────────────
+function buildPrompt() {
+  const t = T[currentLang];
+  const teacher = document.getElementById('teacherName').value.trim();
+  const grade = document.querySelector('input[name="grade"]:checked') ? document.querySelector('input[name="grade"]:checked').value : '';
+  const subj = document.querySelector('input[name="subj"]:checked') ? document.querySelector('input[name="subj"]:checked').value : '';
+  const topic = document.getElementById('topicInput').value.trim();
+  const thinking = Array.from(document.querySelectorAll('input[name="think"]:checked')).map(x => x.value);
+  const atypeEl = document.querySelector('input[name="atype"]:checked');
+  const atype = atypeEl ? atypeEl.value : '';
+  const atypeLabel = atypeEl ? atypeEl.closest('.pill').textContent.trim() : atype;
+  const promptLang = document.querySelector('input[name="promptlang"]:checked') ? document.querySelector('input[name="promptlang"]:checked').value : 'ar';
+  const notes = document.getElementById('notesInput').value.trim();
+  const simEnabled = document.getElementById('simCheck').checked;
+  const simTypes = simEnabled ? Array.from(document.querySelectorAll('input[name="sim"]:checked')).map(x => x.closest('.pill').textContent.trim()) : [];
+  const pasteContent = document.getElementById('pasteContent').value.trim();
+
+  if (!grade || !subj || !topic || !atype) { showToast(t.fillFields, true); return; }
+
+  const hasLogo = !!schoolLogoBase64;
+  const hasFiles = uploadedFiles.length > 0;
+  const hasPaste = pasteContent.length > 0;
+
+  const logoInstruction = getLogoInstruction(promptLang, hasLogo, MUNA_LOGO);
+  const selfBlock = selfAssessBlock[promptLang] || selfAssessBlock.ar;
+  const worksheetBlock = atype === 'worksheet' ? getWorksheetBlock(promptLang) : '';
+
+  let simSec = '';
+  if (simEnabled && simTypes.length > 0) {
+    if (promptLang === 'ar') simSec = '\n\nالفعاليات التفاعلية المطلوبة: ' + simTypes.join('، ');
+    else if (promptLang === 'he') simSec = '\n\nפעילויות נדרשות: ' + simTypes.join(', ');
+    else simSec = '\n\nRequired interactive activities: ' + simTypes.join(', ');
+  }
+
+  let srcNote = '';
+  if (hasFiles) {
+    if (promptLang === 'ar') srcNote = '\n\nتم رفع ملفات مرجعية — ابنِ المهمة استناداً إلى محتواها.';
+    else if (promptLang === 'he') srcNote = '\n\nקבצי עזר הועלו — בנה על בסיסם.';
+    else srcNote = '\n\nReference files uploaded — build the task based on their content.';
+  }
+
+  let pasteNote = '';
+  if (hasPaste) {
+    if (promptLang === 'ar') pasteNote = '\n\nالمحتوى المرجعي من المعلمة:\n"""\n' + pasteContent + '\n"""';
+    else if (promptLang === 'he') pasteNote = '\n\nתוכן עזר מהמורה:\n"""\n' + pasteContent + '\n"""';
+    else pasteNote = '\n\nReference content from teacher:\n"""\n' + pasteContent + '\n"""';
+  }
+
+  let prompt = '';
+  if (promptLang === 'ar') {
+    prompt = 'أنت مصمم تعليمي خبير في بناء صفحات HTML تفاعلية واحترافية للتقييم البديل.\n\n'
+      + 'المعلمة: ' + (teacher || 'منى مصطفى') + '\n'
+      + 'الصف: ' + grade + '\n'
+      + 'المادة: ' + subj + '\n'
+      + 'الموضوع: ' + topic + '\n'
+      + 'مستويات التفكير: ' + (thinking.join('، ') || 'مناسبة للمرحلة') + '\n'
+      + 'نوع التقييم: ' + atypeLabel + '\n'
+      + (notes ? 'ملاحظات: ' + notes + '\n' : '')
+      + '\nمتطلبات التصميم:\n'
+      + logoInstruction + '\n'
+      + '- تصميم بصري احترافي يناسب الصف ' + grade + '\n'
+      + '- ألوان متناسقة، خطوط عربية جميلة، واجهة سهلة للطلاب\n'
+      + '- تضمين اسم المعلمة والصف والمادة في الرأس\n'
+      + '- قسم تعليمات واضح في البداية'
+      + srcNote + pasteNote + worksheetBlock + simSec
+      + (atype !== 'worksheet' ? '\n\nابنِ محتوى مناسباً لـ "' + atypeLabel + '" حول "' + topic + '" لصف ' + grade + ' مادة ' + subj + '.\nطوّر مستويات التفكير: ' + (thinking.join('، ') || 'المناسبة') + '\nأضف معايير تقييم (Rubric) واضحة.' : '')
+      + '\n' + selfBlock
+      + '\n\nالناتج النهائي: كود HTML كامل ومكتفٍ بذاته.';
+  } else if (promptLang === 'he') {
+    prompt = 'אתה מעצב חינוכי מומחה בבניית דפי HTML אינטראקטיביים להערכה חלופית.\n\n'
+      + 'מורה: ' + (teacher || 'מונא מוסטפא') + '\n'
+      + 'כיתה: ' + grade + '\n'
+      + 'מקצוע: ' + subj + '\n'
+      + 'נושא: ' + topic + '\n'
+      + 'רמות חשיבה: ' + (thinking.join(', ') || 'מתאים לגיל') + '\n'
+      + 'סוג הערכה: ' + atypeLabel + '\n'
+      + (notes ? 'הערות: ' + notes + '\n' : '')
+      + '\nדרישות עיצוב:\n'
+      + logoInstruction + '\n'
+      + '- עיצוב מקצועי לכיתה ' + grade + ', צבעים הרמוניים, ממשק ידידותי\n'
+      + '- כותרת עם שם המורה, כיתה, מקצוע'
+      + srcNote + pasteNote + worksheetBlock + simSec
+      + (atype !== 'worksheet' ? '\n\nבנה "' + atypeLabel + '" בנושא "' + topic + '" לכיתה ' + grade + ' ב' + subj + '.\nפתח חשיבה: ' + (thinking.join(', ') || 'מתאים') + '\nכלול רובריקת הערכה.' : '')
+      + '\n' + selfBlock
+      + '\n\nתוצר סופי: קוד HTML מלא ועצמאי.';
+  } else {
+    prompt = 'You are an expert educational designer for interactive HTML alternative assessment pages.\n\n'
+      + 'Teacher: ' + (teacher || 'Muna Mustafa') + '\n'
+      + 'Grade: ' + grade + '\n'
+      + 'Subject: ' + subj + '\n'
+      + 'Topic: ' + topic + '\n'
+      + 'Thinking Levels: ' + (thinking.join(', ') || 'grade-appropriate') + '\n'
+      + 'Assessment Type: ' + atypeLabel + '\n'
+      + (notes ? 'Notes: ' + notes + '\n' : '')
+      + '\nDesign Requirements:\n'
+      + logoInstruction + '\n'
+      + '- Professional design for grade ' + grade + ', harmonious colors, student-friendly\n'
+      + '- Header with teacher name, grade, subject'
+      + srcNote + pasteNote + worksheetBlock + simSec
+      + (atype !== 'worksheet' ? '\n\nBuild "' + atypeLabel + '" content on "' + topic + '" for grade ' + grade + ' in ' + subj + '.\nDevelop thinking at: ' + (thinking.join(', ') || 'appropriate levels') + '\nInclude assessment rubric.' : '')
+      + '\n' + selfBlock
+      + '\n\nFinal output: Complete, self-contained HTML code.';
+  }
+
+  document.getElementById('promptText').textContent = prompt;
+  document.getElementById('promptResult').style.display = 'block';
+  document.getElementById('promptResult').scrollIntoView({behavior:'smooth', block:'start'});
+  generateQR(window.location.href);
+}
+
+// ── COPY ──────────────────────────────────────────────────────────────────────
+function copyPrompt() {
+  const text = document.getElementById('promptText').textContent;
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(function() { showToast(T[currentLang].copied); }).catch(function() { fallbackCopy(text); });
+  } else {
+    fallbackCopy(text);
+  }
+}
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand('copy'); showToast(T[currentLang].copied); }
+  catch(e) { showToast('انسخ يدوياً من المربع أعلاه', true); }
+  document.body.removeChild(ta);
+}
+
+// ── DOWNLOAD ──────────────────────────────────────────────────────────────────
+function downloadPrompt() {
+  const blob = new Blob([document.getElementById('promptText').textContent], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='prompt-muna.txt'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ── SHARE ─────────────────────────────────────────────────────────────────────
+function sharePrompt() { document.getElementById('shareArea').style.display='block'; }
+function shareVia(m) {
+  const text = encodeURIComponent(document.getElementById('promptText').textContent.substring(0,400) + '...');
+  const url = encodeURIComponent(window.location.href);
+  if (m==='whatsapp') window.open('https://wa.me/?text=' + text + '%20' + url, '_blank');
+  else if (m==='email') window.open('mailto:?subject=' + encodeURIComponent('مهمة تقييم بديل') + '&body=' + text, '_blank');
+  else if (m==='telegram') window.open('https://t.me/share/url?url=' + url + '&text=' + text, '_blank');
+}
+
+// ── QR ────────────────────────────────────────────────────────────────────────
+let qrDone = false;
+function generateQR(url) {
+  if (qrDone) return; qrDone = true;
+  const d = document.getElementById('qrcode'); d.innerHTML = '';
+  new QRCode(d, {text:url, width:140, height:140, colorDark:'#5b4fcf', colorLight:'#ffffff'});
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function showToast(msg, err) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = err ? '#e74c3c' : 'var(--primary)';
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2800);
+}
+
+applyTranslations();
+</script>
+</body>
+</html>
