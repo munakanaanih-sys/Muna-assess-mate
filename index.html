@@ -567,7 +567,7 @@
     <div class="action-row">
       <button class="btn-secondary" onclick="copyPrompt()">📋 <span data-t="copyBtn">نسخ البرومبت</span></button>
       <button class="btn-secondary" onclick="downloadPrompt()">⬇ <span data-t="downloadBtn">تحميل ملف الطالب</span></button>
-      <button class="btn-secondary" onclick="sharePrompt()">🔗 <span data-t="shareBtn">مشاركة مع الطلاب</span></button>
+
     </div>
     <div class="ai-links">
       <span style="font-size:0.82rem;color:var(--text-muted);" data-t="sendTo">📍 انقل البرومبت إلى:</span>
@@ -578,19 +578,8 @@
       <a class="ai-link" href="https://v0.dev" target="_blank">⚡ v0.dev</a>
       <a class="ai-link" href="https://bolt.new" target="_blank">🔩 Bolt.new</a>
     </div>
-    <div id="shareArea" style="display:none; margin-top:16px;">
-      <hr class="section-divider">
-      <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:10px;" data-t="shareTitle">مشاركة المهمة مع الطلاب</p>
-      <div class="share-row">
-        <button class="btn-secondary" onclick="shareVia('whatsapp')">💬 واتساب</button>
-        <button class="btn-secondary" onclick="shareVia('email')">📧 <span data-t="shareEmail">إيميل</span></button>
-        <button class="btn-secondary" onclick="shareVia('telegram')">✈️ تيليغرام</button>
-      </div>
-      <div id="qrArea" style="margin-top:16px;">
-        <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:8px;" data-t="qrTitle">امسح الـ QR لفتح المهمة مباشرة</p>
-        <div id="qrcode"></div>
-      </div>
-    </div>
+  </div>
+</div>
   </div>
 
 </main>
@@ -631,7 +620,7 @@ const T = {
     copyBtn:'نسخ البرومبت', downloadBtn:'تحميل ملف الطالب', shareBtn:'مشاركة مع الطلاب',
     sendTo:'📍 انقل البرومبت إلى:',
     shareTitle:'مشاركة المهمة مع الطلاب', shareEmail:'إيميل', qrTitle:'امسح الـ QR لفتح المهمة مباشرة',
-    copied:'تم النسخ بنجاح ✓', fillFields:'الرجاء ملء الحقول المطلوبة (الصف، المادة، الموضوع، نوع التقييم)',
+    copied:'تم النسخ بنجاح ✓', fillFields:'الرجاء ملء الحقول المطلوبة (الصف، المادة، الموضوع، نوع التقييم)', shareHint:'كيف تشارك النتيجة مع طلابك؟', shareHintDesc:'انسخ البرومبت ← افتح أي أداة ذكاء اصطناعي ← احصل على الصفحة التفاعلية ← شارك الرابط أو الملف مع طلابك مباشرة.',
   },
   he: {
     platformTitle:'הפלטפורמה החכמה להערכה חלופית',
@@ -662,7 +651,7 @@ const T = {
     copyBtn:'העתק', downloadBtn:'הורד קובץ', shareBtn:'שתף',
     sendTo:'📍 שלח פרומפט ל:',
     shareTitle:'שיתוף עם תלמידים', shareEmail:'אימייל', qrTitle:'סרוק QR לפתיחת המטלה',
-    copied:'הועתק בהצלחה ✓', fillFields:'אנא מלא את השדות הנדרשים',
+    copied:'הועתק בהצלחה ✓', fillFields:'אנא מלא את השדות הנדרשים', shareHint:'איך לשתף את התוצאה עם תלמידים?', shareHintDesc:'העתק פרומפט ← פתח כלי AI ← קבל את הדף האינטראקטיבי ← שתף קישור או קובץ עם תלמידיך.',
   },
   en: {
     platformTitle:'Smart Alternative Assessment Platform',
@@ -693,7 +682,7 @@ const T = {
     copyBtn:'Copy', downloadBtn:'Download', shareBtn:'Share',
     sendTo:'📍 Send prompt to:',
     shareTitle:'Share with Students', shareEmail:'Email', qrTitle:'Scan QR to open task',
-    copied:'Copied ✓', fillFields:'Please fill required fields (grade, subject, topic, type)',
+    copied:'Copied ✓', fillFields:'Please fill required fields (grade, subject, topic, type)', shareHint:'How to share the result with students?', shareHintDesc:'Copy the prompt → open any AI tool → get the interactive page → share the link or file directly with your students.',
   }
 };
 
@@ -780,14 +769,6 @@ function onSimChange() {
   document.getElementById('simTypes').classList.toggle('active', c.checked);
 }
 
-// ── SELF-ASSESSMENT BLOCK ─────────────────────────────────────────────────────
-const selfAssessBlock = {
-  ar: '\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n\u2b50 \u0642\u0633\u0645 \u0627\u0644\u062a\u0642\u064a\u064a\u0645 \u0627\u0644\u0630\u0627\u062a\u064a \u0644\u0644\u0637\u0627\u0644\u0628 (\u0645\u0637\u0644\u0648\u0628 \u0641\u064a \u0643\u0644 \u0645\u0647\u0645\u0629)\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n\u0641\u064a \u0646\u0647\u0627\u064a\u0629 \u0627\u0644\u0635\u0641\u062d\u0629 \u0627\u0644\u062a\u0641\u0627\u0639\u0644\u064a\u0629 \u0623\u0636\u0641 \u0627\u0644\u0642\u0633\u0645\u064a\u0646 \u0627\u0644\u062a\u0627\u0644\u064a\u064a\u0646:\n\n1\ufe0f\u20e3 \u0627\u0644\u062a\u0642\u064a\u064a\u0645 \u0627\u0644\u0630\u0627\u062a\u064a:\n- \u0642\u0633\u0645 \u062a\u0641\u0627\u0639\u0644\u064a \u064a\u0637\u0631\u062d \u0639\u0644\u0649 \u0627\u0644\u0637\u0627\u0644\u0628 4-5 \u0623\u0633\u0626\u0644\u0629 \u062a\u0642\u064a\u064a\u0645 \u0630\u0627\u062a\u064a \u0645\u0631\u062a\u0628\u0637\u0629 \u0628\u0645\u062d\u062a\u0648\u0649 \u0627\u0644\u0645\u0647\u0645\u0629\n- \u0627\u0633\u062a\u062e\u062f\u0645 \u0645\u0642\u064a\u0627\u0633 \u0625\u064a\u0645\u0648\u062c\u064a (\ud83d\ude15 / \ud83d\ude10 / \ud83d\ude0a / \ud83e\udd29)\n- \u0623\u0638\u0647\u0631 \u0631\u0633\u0627\u0644\u0629 \u062a\u0634\u062c\u064a\u0639\u064a\u0629 \u0645\u062e\u0635\u0635\u0629 \u0628\u0646\u0627\u0621\u064b \u0639\u0644\u0649 \u0625\u062c\u0627\u0628\u0627\u062a \u0627\u0644\u0637\u0627\u0644\u0628\n- \u062d\u0642\u0644 "\u0627\u0633\u0645 \u0627\u0644\u0637\u0627\u0644\u0628" \u064a\u0645\u0644\u0623\u0647 \u0628\u0646\u0641\u0633\u0647\n\n2\ufe0f\u20e3 \u0628\u0637\u0627\u0642\u0629 \u0627\u0644\u062a\u0642\u064a\u064a\u0645 \u0627\u0644\u062a\u0634\u062c\u064a\u0639\u064a\u0629:\n- \u0632\u0631 "\u0627\u062d\u0635\u0644 \u0639\u0644\u0649 \u0628\u0637\u0627\u0642\u062a\u0643 \u0627\u0644\u062a\u0634\u062c\u064a\u0639\u064a\u0629 \ud83c\udfc5"\n- \u0628\u0637\u0627\u0642\u0629 HTML/CSS \u062c\u0645\u064a\u0644\u0629 \u062a\u062d\u062a\u0648\u064a \u0639\u0644\u0649:\n  \u2022 \u0627\u0633\u0645 \u0627\u0644\u0637\u0627\u0644\u0628 + \u0627\u0644\u0635\u0641 + \u0627\u0644\u0645\u0627\u062f\u0629 + \u0627\u0633\u0645 \u0627\u0644\u0645\u0639\u0644\u0645\u0629\n  \u2022 \u0639\u0628\u0627\u0631\u0629 \u062a\u0634\u062c\u064a\u0639\u064a\u0629 \u0645\u062e\u0635\u0635\u0629 \u062d\u0633\u0628 \u0646\u062a\u064a\u062c\u0629 \u0627\u0644\u062a\u0642\u064a\u064a\u0645\n  \u2022 \u062a\u0635\u0645\u064a\u0645 \u062c\u0630\u0627\u0628 \u0628\u0646\u062c\u0648\u0645 \u0648\u0623\u0644\u0648\u0627\u0646 \u062f\u0627\u0641\u0626\u0629\n- \u0632\u0631 "\u062a\u062d\u0645\u064a\u0644 \u0627\u0644\u0628\u0637\u0627\u0642\u0629" (\u0646\u0627\u0641\u0630\u0629 \u0637\u0628\u0627\u0639\u0629 \u0644\u0644\u0628\u0637\u0627\u0642\u0629 \u0641\u0642\u0637)',
-
-  he: '\n\u2b50 \u05e7\u05d8\u05e2 \u05d4\u05e2\u05e8\u05db\u05d4 \u05e2\u05e6\u05de\u05d9\u05ea \u05e9\u05dc \u05d4\u05ea\u05dc\u05de\u05d9\u05d3 (\u05e0\u05d3\u05e8\u05e9 \u05d1\u05db\u05dc \u05de\u05d8\u05dc\u05d4)\n\n\u05d1\u05e1\u05d5\u05e3 \u05d4\u05d3\u05e3 \u05d4\u05d5\u05e1\u05e3:\n1\ufe0f\u20e3 \u05d4\u05e2\u05e8\u05db\u05d4 \u05e2\u05e6\u05de\u05d9\u05ea: 4-5 \u05e9\u05d0\u05dc\u05d5\u05ea, \u05de\u05d3\u05d3 \u05d0\u05de\u05d5\u05d2\u05f3\u05d9, \u05d4\u05d5\u05d3\u05e2\u05ea \u05e2\u05d9\u05d3\u05d5\u05d3 \u05de\u05d5\u05ea\u05d0\u05de\u05ea, \u05e9\u05d3\u05d4 \u05e9\u05dd \u05d4\u05ea\u05dc\u05de\u05d9\u05d3\n2\ufe0f\u20e3 \u05db\u05e8\u05d8\u05d9\u05e1 \u05e2\u05d9\u05d3\u05d5\u05d3 \u05dc\u05d4\u05d5\u05e8\u05d3\u05d4: \u05db\u05e4\u05ea\u05d5\u05e8 \u05e7\u05d1\u05dc \u05db\u05e8\u05d8\u05d9\u05e1 \u05e2\u05d9\u05d3\u05d5\u05d3, HTML/CSS \u05d9\u05e4\u05d4 \u05e2\u05dd \u05e9\u05dd \u05d4\u05ea\u05dc\u05de\u05d9\u05d3+\u05db\u05d9\u05ea\u05d4+\u05de\u05e7\u05e6\u05d5\u05e2+\u05de\u05e9\u05e4\u05d8 \u05e2\u05d9\u05d3\u05d5\u05d3, \u05db\u05e4\u05ea\u05d5\u05e8 \u05d4\u05d3\u05e4\u05e1\u05d4',
-
-  en: '\n\u2b50 Student Self-Assessment Section (required in every task)\n\nAt the END of the page add:\n1\ufe0f\u20e3 Self-Assessment: 4-5 questions, emoji scale, personalized encouragement, student name field\n2\ufe0f\u20e3 Downloadable Encouragement Card: button "Get Your Card", beautiful HTML/CSS card with student name, grade, subject, teacher name, custom message, print/download button'
-};
 
 // ── WORKSHEET BLOCK ───────────────────────────────────────────────────────────
 function getWorksheetBlock(lang) {
@@ -800,25 +781,41 @@ function getWorksheetBlock(lang) {
   }
 }
 
+const GOLDEN_AR = "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🏗️ هيكل الصفحة الاحترافي (إلزامي لجميع الأنواع)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nاعتمد بنية صفحة تفاعلية على مستوى ورقة عمل \"مدخل إلى علم الفيزياء\" التي صممتها منى مصطفى — نفس الاحترافية والتفاعلية والروح التربوية، مطبّقة على موضوع \"${topic}\".\n\n1) رأس الصفحة:\n   - الشريط العلوي بالشعارات كما هو محدد أعلاه\n   - عنوان جذاب بإيموجي مرتبط بموضوع \"${topic}\"\n   - شارات (badges) صغيرة تعرض: الصف، المادة، اسم المعلمة، ومستويات التفكير المختارة\n   - حقول إدخال: اسم الطالب/ة، التاريخ، الصف والشعبة\n\n2) بطاقة \"تعليمات الورقة\" قابلة للطي في البداية، توضح للطالب:\n   - فكرة عامة عن الرحلة التعليمية\n   - الأدوات المطلوبة (قلم، آلة حاسبة... حسب الموضوع)\n   - طريقة التقييم (روبريك)\n   - مستويات التفكير المستهدفة\n   - المكافأة النهائية (بطاقة تشجيعية)\n\n3) المحتوى مقسّم إلى أقسام مرقّمة (١، ٢، ٣...)، كل قسم عبارة عن بطاقة قابلة للطي/الفتح (Accordion) وتحتوي:\n   - عنوان فرعي بإيموجي + جملة وصفية مختصرة + وسم مستوى التفكير المستهدف لهذا القسم\n   - شرح مبسّط للمفهوم بلغة واضحة مناسبة لعمر الطلاب، مع أمثلة من الحياة اليومية وإيموجي توضيحية\n   - عند الحاجة: جدول معلومات منظم (تعريفات / رموز / وحدات / قوانين / خطوات) بتنسيق جدول HTML واضح\n   - نشاط تفاعلي واحد على الأقل في نهاية القسم، يتناسب مع مستوى التفكير المحدد له:\n     • تذكر → تعريف بكلمات الطالب، أو تصنيف عناصر بالنقر مع تصحيح فوري\n     • فهم → سحب وإفلات للتصنيف، أو مطابقة/ربط بين عمودين\n     • تطبيق → مسائل حسابية مع حقول إدخال وزر \"تحقق\" يصحح فوراً\n     • تحليل → مقارنة بين حالتين/سيناريوهين مع تفسير كتابي\n     • تقييم → اتخاذ قرار مبرر بين بدائل مطروحة\n     • إبداع → تصميم أو اقتراح حل/مثال جديد من الطالب\n   - وزّع الأقسام والأنشطة بحيث تغطي مجتمعةً كل مستويات التفكير المختارة: ${thinkingList}\n   - كل ما كان مناسباً للموضوع، أضف محاكاة تفاعلية مرتبطة مباشرة بـ \"${topic}\" (مثال: تجربة افتراضية، خط زمني تفاعلي، محرّك معادلات، أو أداة قياس/إزاحة تُحاكي الموضوع)\n\n4) قسم \"معيار التقييم (الروبريك)\" في جدول واضح يحتوي: المعيار | ممتاز (4) | جيد جداً (3) | جيد (2) | يحتاج دعم (1) | الوزن — بحيث ترتبط المعايير مباشرة بأقسام/أنشطة الصفحة ومجموع الأوزان = 100%\n\n5) قسم \"التأمل الذاتي\" في نهاية الصفحة:\n   - تقييم بالنجوم (★ من 1 إلى 5) لمدى فهم الطالب للموضوع\n   - مقياس مزاجي بالإيموجي (😄🙂😐😕😟) لشعور الطالب أثناء التعلم\n   - 3 أسئلة تفكير مفتوحة: \"ما أهم شيء تعلمته اليوم؟\" / \"ما الذي لا يزال يُربكني؟\" / \"كيف سأستخدم ما تعلمته في حياتي؟\"\n   - حقل \"رسالة إلى معلمتي ${teacherName}\"\n   - عداد نقاط (Progress Tracker) يتراكم مع كل نشاط يُنجزه الطالب\n\n6) البطاقة التشجيعية النهائية (بعد إنهاء كل الأقسام):\n   - زر بارز \"أنهِ الورقة وأنشئ بطاقتك التشجيعية 🎉\"\n   - بطاقة HTML/CSS جميلة تحتوي: اسم الطالب، الصف، المادة، اسم المعلمة ${teacherName}، عبارة تشجيعية مخصصة حسب مستوى الأداء، تصميم بنجوم وألوان دافئة مناسبة للعمر\n   - أزرار: \"📥 تحميل البطاقة\" و\"🔄 تجديد البطاقة\" و\"✕ إغلاق\"\n\n7) التصميم العام:\n   - كل قسم رئيسي قابل للطي/الفتح بسهم واضح، مع ترقيم بصري بارز (دائرة بها رقم القسم)\n   - الصفحة بالكامل ملف HTML واحد ذاتي الاكتفاء (CSS + JS مضمّنين)، يمكن استخدام خطوط Google Fonts إن لزم\n   - تصميم متجاوب يعمل على الموبايل والكمبيوتر";
+const GOLDEN_HE = "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🏗️ מבנה דף מקצועי (חובה לכל הסוגים)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nהתבסס על מבנה דף אינטראקטיבי באיכות הדף \"מבוא לפיזיקה\" שיצרה מונא מוסטפא — אותה רמת מקצועיות, אינטראקטיביות ורוח חינוכית, בנושא \"${topic}\".\n\n1) כותרת הדף: שורת לוגואים כמוגדר מעלה; כותרת מושכת עם אמוג'י; תגיות (badges) של כיתה, מקצוע, שם המורה ורמות החשיבה; שדות שם תלמיד/ה, תאריך, כיתה.\n\n2) כרטיס \"הוראות\" מתקפל בתחילת הדף: סקירה כללית, כלים נדרשים, אופן ההערכה (רובריקה), רמות חשיבה, והפרס הסופי (כרטיס עידוד).\n\n3) התוכן מחולק לסעיפים ממוספרים (1, 2, 3...), כל סעיף הוא כרטיס מתקפל הכולל:\n   - כותרת משנה עם אמוג'י + תיאור קצר + תגית רמת חשיבה\n   - הסבר ברור ופשוט עם דוגמאות יומיומיות ואמוג'י\n   - טבלת מידע מאורגנת במידת הצורך (הגדרות/סימנים/יחידות/חוקים)\n   - פעילות אינטראקטיבית אחת לפחות בסוף כל סעיף, מתאימה לרמת החשיבה:\n     • זכירה → הגדרה במילים שלי / מיון בלחיצה עם משוב מיידי\n     • הבנה → גרור ושחרר למיון, או התאמה בין עמודות\n     • יישום → תרגילי חישוב עם שדה קלט וכפתור \"בדוק\" עם משוב מיידי\n     • ניתוח → השוואה בין שני מקרים עם הסבר כתוב\n     • הערכה → קבלת החלטה מנומקת בין חלופות\n     • יצירה → הצעת פתרון/דוגמה חדשה מהתלמיד\n   - הסעיפים יחד יכסו את רמות החשיבה שנבחרו: ${thinkingList}\n   - הוסף סימולציה אינטראקטיבית הקשורה ל\"${topic}\" אם רלוונטי\n\n4) טבלת \"רובריקת הערכה\": קריטריון | מצוין(4) | טוב מאוד(3) | טוב(2) | זקוק לתמיכה(1) | משקל — סה\"כ המשקלים = 100%\n\n5) \"הערכה עצמית\" בסוף הדף: דירוג כוכבים (1-5), מדד אמוג'י למצב רוח, 3 שאלות פתוחות (מה הדבר החשוב שלמדתי? / מה עדיין מבלבל אותי? / איך אשתמש בזה?), שדה \"הודעה למורה ${teacherName}\", ומעקב נקודות מתקדם.\n\n6) כרטיס עידוד סופי: כפתור \"סיים ויצור כרטיס עידוד 🎉\"; כרטיס HTML/CSS עם שם התלמיד, כיתה, מקצוע, שם המורה ${teacherName}, משפט מותאם, עיצוב חם; כפתורי הורדה/חידוש/סגירה.\n\n7) עיצוב: כל סעיף מתקפל עם מספר בולט בעיגול, דף HTML עצמאי יחיד, רספונסיבי.";
+const GOLDEN_EN = "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🏗️ PROFESSIONAL PAGE STRUCTURE (Mandatory for all types)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nBase the page on the same quality, interactivity, and pedagogical spirit as Muna Mustafa's \"Introduction to Physics\" interactive worksheet, applied to the topic \"${topic}\".\n\n1) Page Header: top logo bar as specified above; an engaging title with emoji related to the topic; small badges showing grade, subject, teacher name, and selected thinking levels; input fields for student name, date, and class.\n\n2) A collapsible \"Instructions\" card at the top explaining: overview of the learning journey, required tools, how grading works (rubric), target thinking levels, and the final reward (encouragement card).\n\n3) Content split into NUMBERED sections (1, 2, 3...), each a collapsible accordion card containing:\n   - A sub-heading with emoji + a short descriptive sentence + a badge for that section's target thinking level\n   - A clear, age-appropriate explanation with everyday examples and emoji\n   - When useful: an organized info table (definitions / symbols / units / laws / steps)\n   - At least one interactive activity at the end of the section, matched to its thinking level:\n     • Remember -> definition in own words, or click-to-classify with instant feedback\n     • Understand -> drag & drop classification, or matching between two columns\n     • Apply -> calculation problems with input fields and a \"Check\" button with instant feedback\n     • Analyze -> compare two cases/scenarios with a written explanation\n     • Evaluate -> justified decision between given alternatives\n     • Create -> student proposes a new solution/example\n   - Together, the sections must cover all selected thinking levels: ${thinkingList}\n   - Where relevant, add an interactive simulation directly tied to \"${topic}\" (e.g. a virtual experiment, interactive timeline, equation solver, or measurement/displacement tool simulating the topic)\n\n4) An \"Assessment Rubric\" table: Criterion | Excellent(4) | Very Good(3) | Good(2) | Needs Support(1) | Weight -- weights must sum to 100% and map directly to the page's sections/activities\n\n5) A \"Self-Reflection\" section at the end: star rating (1-5) for understanding, an emoji mood scale, 3 open reflection questions (\"What's the most important thing I learned today?\" / \"What still confuses me?\" / \"How will I use what I learned?\"), a \"Message to my teacher ${teacherName}\" field, and an accumulating progress/points tracker throughout the page.\n\n6) Final Encouragement Card: a prominent \"Finish & Get My Encouragement Card 🎉\" button; a beautiful HTML/CSS card showing student name, grade, subject, teacher name ${teacherName}, a personalized message based on performance, warm age-appropriate design; with Download / Regenerate / Close buttons.\n\n7) Overall design: every major section is a collapsible accordion with a prominent numbered circle, the whole thing is one self-contained responsive HTML file.";
+
+// ── GOLDEN STRUCTURE BLOCK (professional page structure, mandatory) ───────────
+function getGoldenStructureBlock(lang, topic, thinkingList, teacherName) {
+  var tpl = (lang === "he") ? GOLDEN_HE : (lang === "en") ? GOLDEN_EN : GOLDEN_AR;
+  return tpl
+    .split("\u0024{topic}").join(topic)
+    .split("\u0024{thinkingList}").join(thinkingList)
+    .split("\u0024{teacherName}").join(teacherName);
+}
+
 // ── LOGO INSTRUCTION (pure text, no HTML tags inside JS strings) ──────────────
 function getLogoInstruction(lang, hasLogo, munaLogoUrl) {
   if (lang === 'ar') {
+    var base = '- في رأس الصفحة: شريط أفقي ثابت يحتوي على:\n  • أقصى اليسار (إلزامي في كل صفحة تُنتجها هذه المنصة، بارز وواضح، 90×90 بكسل، شكل دائري، بإطار أبيض وظل خفيف): شعار منى مصطفى الشخصي — اجلب الصورة من الرابط التالي مباشرة كقيمة src: ' + munaLogoUrl;
     if (hasLogo) {
-      return '- في رأس الصفحة: شريط أفقي يحتوي على:\n  • يسار (بارز، 90×90 بكسل، دائري): شعار منى مصطفى الشخصي — اجلب الصورة من الرابط: ' + munaLogoUrl + ' (حجم 80×80 بكسل، شكل دائري)\n  • وسط: عنوان الصفحة واسم المعلمة\n  • يمين: شعار المدرسة الذي رفعه المستخدم (base64، حجم 80×80 بكسل، شكل دائري)';
+      return base + '\n  • وسط الشريط: عنوان الصفحة، اسم المادة/الموضوع، واسم المعلمة\n  • أقصى اليمين: شعار المدرسة الذي رفعه المستخدم (الصورة المرفقة بصيغة base64، حجم 90×90 بكسل، شكل دائري)';
     } else {
-      return '- في رأس الصفحة: شريط أفقي يحتوي على:\n  • يسار (بارز، 90×90 بكسل، دائري): شعار منى مصطفى الشخصي — اجلب الصورة من الرابط: ' + munaLogoUrl + ' (حجم 80×80 بكسل، شكل دائري)\n  • يمين العنوان واسم المعلمة\n  • لا تضع أي شعار أو placeholder في الجهة اليمنى';
+      return base + '\n  • باقي الشريط: عنوان الصفحة، اسم المادة/الموضوع، واسم المعلمة\n  • لا تضع أي شعار مدرسة أو placeholder في الجهة اليمنى';
     }
   } else if (lang === 'he') {
+    var baseHE = '- בכותרת הדף: שורה אופקית קבועה עם:\n  • הקצה השמאלי (חובה בכל דף שמיוצר על ידי פלטפורמה זו, בולט וברור, 90x90px, עגול, עם מסגרת לבנה וצל קל): לוגו מונא מוסטפא האישי — טען את התמונה ישירות מהקישור הבא כ-src: ' + munaLogoUrl;
     if (hasLogo) {
-      return '- בכותרת הדף: שורה אופקית עם:\n  • שמאל (בולט, 90×90px, עגול): לוגו מונא מוסטפא — טען מ: ' + munaLogoUrl + ' (80x80px, עגול)\n  • מרכז: כותרת הדף ושם המורה\n  • ימין: לוגו בית הספר שהועלה (base64, 80x80px, עגול)';
+      return baseHE + '\n  • מרכז השורה: כותרת הדף, שם המקצוע/הנושא ושם המורה\n  • הקצה הימני: לוגו בית הספר שהועלה (base64, 90x90px, עגול)';
     } else {
-      return '- בכותרת הדף: שורה אופקית עם:\n  • שמאל (בולט, 90×90px, עגול): לוגו מונא מוסטפא — טען מ: ' + munaLogoUrl + ' (80x80px, עגול)\n  • כותרת ושם המורה\n  • אין לוגו בית ספר בצד ימין';
+      return baseHE + '\n  • שאר השורה: כותרת הדף, שם המקצוע/הנושא ושם המורה\n  • אין לוגו בית ספר או placeholder בצד ימין';
     }
   } else {
+    var baseEN = '- In the page header: a fixed horizontal bar containing:\n  • FAR LEFT (mandatory on every page generated by this platform, prominent, 90x90px, circular, white border with subtle shadow): Muna Mustafa personal logo — load the image directly from this URL as the src: ' + munaLogoUrl;
     if (hasLogo) {
-      return '- In the page header: a horizontal bar containing:\n  • LEFT (prominent, 90×90px, circular): Muna Mustafa personal logo — fetch from: ' + munaLogoUrl + ' (80x80px, circular)\n  • CENTER: page title and teacher name\n  • RIGHT: uploaded school logo (base64, 80x80px, circular)';
+      return baseEN + '\n  • CENTER: page title, subject/topic name, and teacher name\n  • FAR RIGHT: the uploaded school logo (base64 image, 90x90px, circular)';
     } else {
-      return '- In the page header: a horizontal bar with:\n  • LEFT (prominent, 90×90px, circular): Muna Mustafa personal logo — fetch from: ' + munaLogoUrl + ' (80x80px, circular)\n  • page title and teacher name\n  • No school logo or placeholder on the right';
+      return baseEN + '\n  • REST: page title, subject/topic name, and teacher name\n  • No school logo or placeholder on the right side';
     }
   }
 }
@@ -847,8 +844,27 @@ function buildPrompt() {
   const hasPaste = pasteContent.length > 0;
 
   const logoInstruction = getLogoInstruction(promptLang, hasLogo, MUNA_LOGO);
-  const selfBlock = selfAssessBlock[promptLang] || selfAssessBlock.ar;
   const worksheetBlock = atype === 'worksheet' ? getWorksheetBlock(promptLang) : '';
+
+  const teacherNameByLang = { ar: teacher || 'منى مصطفى', he: teacher || 'מונא מוסטפא', en: teacher || 'Muna Mustafa' };
+  const teacherNameForBlock = teacherNameByLang[promptLang] || teacherNameByLang.ar;
+
+  const defaultThinking = { ar: 'مناسبة للمرحلة العمرية', he: 'מתאים לגיל', en: 'grade-appropriate levels' };
+  let thinkingListStr;
+  if (thinking.length > 0) {
+    if (promptLang === 'ar') thinkingListStr = thinking.join('، ');
+    else if (promptLang === 'he') {
+      const heMap = {'تذكر':'זכירה','فهم':'הבנה','تطبيق':'יישום','تحليل':'ניתוח','تقييم':'הערכה','إبداع':'יצירה'};
+      thinkingListStr = thinking.map(x => heMap[x] || x).join(', ');
+    } else {
+      const enMap = {'تذكر':'Remember','فهم':'Understand','تطبيق':'Apply','تحليل':'Analyze','تقييم':'Evaluate','إبداع':'Create'};
+      thinkingListStr = thinking.map(x => enMap[x] || x).join(', ');
+    }
+  } else {
+    thinkingListStr = defaultThinking[promptLang] || defaultThinking.ar;
+  }
+
+  const goldenBlock = getGoldenStructureBlock(promptLang, topic, thinkingListStr, teacherNameForBlock);
 
   let simSec = '';
   if (simEnabled && simTypes.length > 0) {
@@ -887,9 +903,11 @@ function buildPrompt() {
       + '- ألوان متناسقة، خطوط عربية جميلة، واجهة سهلة للطلاب\n'
       + '- تضمين اسم المعلمة والصف والمادة في الرأس\n'
       + '- قسم تعليمات واضح في البداية'
-      + srcNote + pasteNote + worksheetBlock + simSec
+      + srcNote + pasteNote
+      + goldenBlock
+      + (atype === 'worksheet' ? worksheetBlock : '')
+      + simSec
       + (atype !== 'worksheet' ? '\n\nابنِ محتوى مناسباً لـ "' + atypeLabel + '" حول "' + topic + '" لصف ' + grade + ' مادة ' + subj + '.\nطوّر مستويات التفكير: ' + (thinking.join('، ') || 'المناسبة') + '\nأضف معايير تقييم (Rubric) واضحة.' : '')
-      + '\n' + selfBlock
       + '\n\nالناتج النهائي: كود HTML كامل ومكتفٍ بذاته.';
   } else if (promptLang === 'he') {
     prompt = 'אתה מעצב חינוכי מומחה בבניית דפי HTML אינטראקטיביים להערכה חלופית.\n\n'
@@ -904,9 +922,11 @@ function buildPrompt() {
       + logoInstruction + '\n'
       + '- עיצוב מקצועי לכיתה ' + grade + ', צבעים הרמוניים, ממשק ידידותי\n'
       + '- כותרת עם שם המורה, כיתה, מקצוע'
-      + srcNote + pasteNote + worksheetBlock + simSec
+      + srcNote + pasteNote
+      + goldenBlock
+      + (atype === 'worksheet' ? worksheetBlock : '')
+      + simSec
       + (atype !== 'worksheet' ? '\n\nבנה "' + atypeLabel + '" בנושא "' + topic + '" לכיתה ' + grade + ' ב' + subj + '.\nפתח חשיבה: ' + (thinking.join(', ') || 'מתאים') + '\nכלול רובריקת הערכה.' : '')
-      + '\n' + selfBlock
       + '\n\nתוצר סופי: קוד HTML מלא ועצמאי.';
   } else {
     prompt = 'You are an expert educational designer for interactive HTML alternative assessment pages.\n\n'
@@ -921,9 +941,11 @@ function buildPrompt() {
       + logoInstruction + '\n'
       + '- Professional design for grade ' + grade + ', harmonious colors, student-friendly\n'
       + '- Header with teacher name, grade, subject'
-      + srcNote + pasteNote + worksheetBlock + simSec
+      + srcNote + pasteNote
+      + goldenBlock
+      + (atype === 'worksheet' ? worksheetBlock : '')
+      + simSec
       + (atype !== 'worksheet' ? '\n\nBuild "' + atypeLabel + '" content on "' + topic + '" for grade ' + grade + ' in ' + subj + '.\nDevelop thinking at: ' + (thinking.join(', ') || 'appropriate levels') + '\nInclude assessment rubric.' : '')
-      + '\n' + selfBlock
       + '\n\nFinal output: Complete, self-contained HTML code.';
   }
 
