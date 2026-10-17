@@ -378,6 +378,23 @@
     cursor: pointer; font-family: inherit;
   }
 
+  /* ── ASSESSMENT PATH (general / creative) ── */
+  .path-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .path-card { font-family: inherit; text-align: start; background: var(--bg); border: 2px solid var(--border); border-radius: 14px; padding: 16px 18px; cursor: pointer; display: grid; gap: 6px; transition: border-color .2s, box-shadow .2s, transform .2s; color: var(--text); }
+  .path-card:hover { border-color: var(--primary-light); transform: translateY(-2px); }
+  .path-card.selected { border-color: var(--primary); background: #f1efff; box-shadow: 0 6px 20px rgba(91,79,207,0.15); }
+  #pathCreative.selected { border-color: var(--accent); background: #fff1f7; box-shadow: 0 6px 20px rgba(232,96,154,0.15); }
+  .path-icon { font-size: 1.8rem; }
+  .path-name { font-weight: 900; font-size: 1.05rem; color: var(--primary-dark); }
+  #pathCreative .path-name { color: #a3245c; }
+  .path-desc { font-size: 0.84rem; color: var(--text-muted); line-height: 1.65; }
+  .cr-note { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px; }
+  .cr-steps { margin-top: 18px; background: #fff7fb; border: 1.5px dashed #f2b6d0; border-radius: 12px; padding: 12px 16px; }
+  .cr-steps-title { font-weight: 800; color: #a3245c; margin-bottom: 6px; font-size: 0.92rem; }
+  .cr-steps ol { padding-inline-start: 20px; font-size: 0.86rem; line-height: 1.8; color: var(--text); }
+  .btn-claude { background: #d97757; color: #fff; border: none; border-radius: 10px; padding: 10px 18px; font-family: inherit; font-weight: 800; font-size: 0.9rem; cursor: pointer; }
+  .btn-claude:hover { opacity: .9; }
+
   /* ── DECORATIVE STARS in header ── */
   .star { position: absolute; opacity: 0.15; font-size: 1.4rem; pointer-events: none; }
 </style>
@@ -474,6 +491,7 @@
     </div>
 
     <!-- Source Materials -->
+    <div id="sourceBlock">
     <hr class="section-divider">
     <div style="font-weight:800; color:var(--primary); font-size:0.95rem; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
       📁 <span data-t="sourceFilesTitle">المواد المرجعية (اختياري)</span>
@@ -492,7 +510,55 @@
       ✏️ <span data-t="pasteLabel">أو اكتب / الصق المحتوى المرجعي مباشرة:</span>
     </div>
     <textarea id="pasteContent" rows="4" data-ph="pastePh" style="direction:rtl;"></textarea>
+    </div>
   </div>
+
+  <!-- Assessment path: general (quantitative) or creative -->
+  <div class="card">
+    <div class="card-title" data-t="pathTitle">نوع التقييم</div>
+    <div class="path-grid">
+      <button type="button" class="path-card" id="pathGeneral" onclick="setPath('general')">
+        <span class="path-icon">📊</span>
+        <span class="path-name" data-t="pathGenName">تقييم عام (كمّي)</span>
+        <span class="path-desc" data-t="pathGenDesc">ورقة عمل، بحث علمي، تجربة علمية. تحصل على برومبت جاهز تنقله إلى Claude لإنشاء مهمة محوسبة بعلامة.</span>
+      </button>
+      <button type="button" class="path-card" id="pathCreative" onclick="setPath('creative')">
+        <span class="path-icon">🎨</span>
+        <span class="path-name" data-t="pathCrName">تقييم إبداعي</span>
+        <span class="path-desc" data-t="pathCrDesc">عرض، عارضة، فيديو، بودكاست، مقابلة، مجسم، لعبة. تخطّط المهمة خطوة بخطوة وتحصل على ملف للطالب ومفتاح تصحيح للمعلم.</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- CREATIVE PATH -->
+  <div id="creativePath" style="display:none;">
+    <div class="card">
+      <div class="card-title" data-t="crTypesTitle">نوع المهمة الإبداعية</div>
+      <p class="cr-note" data-t="crTypesNote">اختر نوعين: الطالب سيختار بين مهمتين تفحصان المهارة نفسها. يمكنك تغييرهما لاحقًا.</p>
+      <div class="pill-group" id="crGroup">
+        <label class="pill"><input type="checkbox" name="crkind" value="presentation">🎤 <span data-t="k_presentation">تقديم وعرض</span></label>
+        <label class="pill"><input type="checkbox" name="crkind" value="poster">🖼 <span data-t="k_poster">عارضة</span></label>
+        <label class="pill"><input type="checkbox" name="crkind" value="video">🎬 <span data-t="k_video">إنشاء فيديو</span></label>
+        <label class="pill"><input type="checkbox" name="crkind" value="podcast">🎙 <span data-t="k_podcast">بودكاست</span></label>
+        <label class="pill"><input type="checkbox" name="crkind" value="interview">🗣 <span data-t="k_interview">تمثيل مقابلة</span></label>
+        <label class="pill"><input type="checkbox" name="crkind" value="model">🧱 <span data-t="k_model">بناء مجسم توضيحي</span></label>
+        <label class="pill"><input type="checkbox" name="crkind" value="digitalGame">🕹 <span data-t="k_digitalGame">إنشاء لعبة محوسبة</span></label>
+        <label class="pill"><input type="checkbox" name="crkind" value="physicalGame">🎲 <span data-t="k_physicalGame">إنتاج لعبة عملية</span></label>
+      </div>
+      <div class="cr-steps">
+        <div class="cr-steps-title" data-t="crNextTitle">ماذا سيحدث بعد ذلك؟</div>
+        <ol>
+          <li data-t="crStep1">تنتقل إلى مسار التخطيط الإبداعي (ومضات)، والبيانات التي كتبتها هنا معبّأة مسبقًا.</li>
+          <li data-t="crStep2">تحدد المهارة، تصوغ المهمتين، وتراجع مرشد التصحيح: 50% لفهم المهارة، و50% للشكل والتقديم واستخدام التكنولوجيا.</li>
+          <li data-t="crStep3">تنزّل ملفَي Word: ملف للطالب يشرح مركّبات المهمة، ومفتاح تصحيح للمعلم.</li>
+        </ol>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="goCreative()">🎨 <span data-t="crGo">انتقل إلى التخطيط الإبداعي</span></button>
+  </div>
+
+  <!-- GENERAL PATH -->
+  <div id="generalPath" style="display:none;">
 
   <!-- Thinking Level -->
   <div class="card">
@@ -513,11 +579,8 @@
     <div class="card-title" data-t="assessType">نوع التقييم البديل</div>
     <div class="pill-group" id="typeGroup">
       <label class="pill"><input type="radio" name="atype" value="worksheet">📄 <span data-t="a1">ورقة عمل</span></label>
-      <label class="pill"><input type="radio" name="atype" value="model">🧱 <span data-t="a2">بناء مجسم</span></label>
-      <label class="pill"><input type="radio" name="atype" value="presentation">🎤 <span data-t="a3">تقديم وعرض</span></label>
       <label class="pill"><input type="radio" name="atype" value="experiment">🔬 <span data-t="a4">تجربة علمية</span></label>
-      <label class="pill"><input type="radio" name="atype" value="research">📚 <span data-t="a5">بحث</span></label>
-      <label class="pill"><input type="radio" name="atype" value="poster">🖼 <span data-t="a6">عارضة</span></label>
+      <label class="pill"><input type="radio" name="atype" value="research">📚 <span data-t="a5">بحث علمي</span></label>
     </div>
 
     <div id="simulationSection" style="display:none; margin-top:16px;">
@@ -565,6 +628,7 @@
     <div class="card-title" data-t="resultTitle">⭐ البرومبت الذكي الجاهز</div>
     <div id="promptText" class="prompt-box"></div>
     <div class="action-row">
+      <button class="btn-claude" onclick="copyAndOpenClaude()">🤖 <span data-t="claudeBtn">انسخ البرومبت وافتح Claude</span></button>
       <button class="btn-secondary" onclick="copyPrompt()">📋 <span data-t="copyBtn">نسخ البرومبت</span></button>
       <button class="btn-secondary" onclick="downloadPrompt()">⬇ <span data-t="downloadBtn">تحميل ملف الطالب</span></button>
 
@@ -579,8 +643,7 @@
       <a class="ai-link" href="https://bolt.new" target="_blank">🔩 Bolt.new</a>
     </div>
   </div>
-</div>
-  </div>
+  </div><!-- /generalPath -->
 
 </main>
 
@@ -592,6 +655,11 @@ const MUNA_LOGO = 'https://i.postimg.cc/SNgVgv8L/my-new-icon.png';
 
 const T = {
   ar: {
+    pathTitle:'نوع التقييم', pathGenName:'تقييم عام (كمّي)', pathGenDesc:'ورقة عمل، بحث علمي، تجربة علمية. تحصل على برومبت جاهز تنقله إلى Claude لإنشاء مهمة محوسبة بعلامة.', pathCrName:'تقييم إبداعي', pathCrDesc:'عرض، عارضة، فيديو، بودكاست، مقابلة، مجسم، لعبة. تخطّط المهمة خطوة بخطوة وتحصل على ملف للطالب ومفتاح تصحيح للمعلم.',
+    crTypesTitle:'نوع المهمة الإبداعية', crTypesNote:'اختر نوعين: الطالب سيختار بين مهمتين تفحصان المهارة نفسها. يمكنك تغييرهما لاحقًا.',
+    k_presentation:'تقديم وعرض', k_poster:'عارضة', k_video:'إنشاء فيديو', k_podcast:'بودكاست', k_interview:'تمثيل مقابلة', k_model:'بناء مجسم توضيحي', k_digitalGame:'إنشاء لعبة محوسبة', k_physicalGame:'إنتاج لعبة عملية',
+    crNextTitle:'ماذا سيحدث بعد ذلك؟', crStep1:'تنتقل إلى مسار التخطيط الإبداعي (ومضات)، والبيانات التي كتبتها هنا معبّأة مسبقًا.', crStep2:'تحدد المهارة، تصوغ المهمتين، وتراجع مرشد التصحيح: 50% لفهم المهارة، و50% للشكل والتقديم واستخدام التكنولوجيا.', crStep3:'تنزّل ملفَي Word: ملف للطالب يشرح مركّبات المهمة، ومفتاح تصحيح للمعلم.',
+    crGo:'انتقل إلى التخطيط الإبداعي', crMax:'يمكن اختيار نوعين على الأكثر', crNeedKind:'اختر نوعًا واحدًا على الأقل للمهمة الإبداعية', crNeedBasics:'الرجاء ملء الصف والمادة والموضوع أولًا', claudeBtn:'انسخ البرومبت وافتح Claude',
     platformTitle:'المنصة الذكية للتقييم البديل',
     platformOwner:'موقع خاص بالمعلمة منى مصطفى',
     welcomeText:'أهلاً وسهلاً معلمينا الأعزاء 💗\nدعونا نبني معاً مهمة تقييم بديل رائعة لطلابكم!',
@@ -609,7 +677,7 @@ const T = {
     thinkingTitle:'مستوى التفكير', thinkingNote:'يمكن اختيار أكثر من مستوى',
     t1:'تذكر',t2:'فهم',t3:'تطبيق',t4:'تحليل',t5:'تقييم',t6:'إبداع',
     assessType:'نوع التقييم البديل',
-    a1:'ورقة عمل',a2:'بناء مجسم',a3:'تقديم وعرض',a4:'تجربة علمية',a5:'بحث',a6:'عارضة',
+    a1:'ورقة عمل',a2:'بناء مجسم',a3:'تقديم وعرض',a4:'تجربة علمية',a5:'بحث علمي',a6:'عارضة',
     simLabel:'دمج فعاليات تدريبية / محاكاة تفاعلية',
     simDesc:'سيُضاف طلب لإنشاء أنشطة تفاعلية مثل اختبارات ذاتية، سيناريوهات، أو ألعاب تعليمية',
     sim1:'اختبار ذاتي',sim2:'سيناريو تفاعلي',sim3:'لعبة تعليمية',sim4:'سحب وإفلات',sim5:'بطاقات تعلم',sim6:'خط زمني',
@@ -623,6 +691,11 @@ const T = {
     copied:'تم النسخ بنجاح ✓', fillFields:'الرجاء ملء الحقول المطلوبة (الصف، المادة، الموضوع، نوع التقييم)', shareHint:'كيف تشارك النتيجة مع طلابك؟', shareHintDesc:'انسخ البرومبت ← افتح أي أداة ذكاء اصطناعي ← احصل على الصفحة التفاعلية ← شارك الرابط أو الملف مع طلابك مباشرة.',
   },
   he: {
+    pathTitle:'סוג ההערכה', pathGenName:'הערכה כללית (כמותית)', pathGenDesc:'דף עבודה, מחקר מדעי, ניסוי מדעי. מקבלים פרומפט מוכן להעברה ל-Claude ליצירת משימה ממוחשבת עם ציון.', pathCrName:'הערכה יצירתית', pathCrDesc:'מצגת, תצוגה, סרטון, פודקאסט, ראיון, מודל, משחק. מתכננים את המשימה שלב אחר שלב ומקבלים קובץ לתלמיד ומחוון למורה.',
+    crTypesTitle:'סוג המשימה היצירתית', crTypesNote:'בחרו שני סוגים: התלמיד יבחר בין שתי משימות שבודקות את אותה מיומנות. ניתן לשנות אותם בהמשך.',
+    k_presentation:'הצגה ומצגת', k_poster:'תצוגה (פוסטר)', k_video:'יצירת סרטון', k_podcast:'פודקאסט', k_interview:'המחזת ראיון', k_model:'בניית מודל המחשה', k_digitalGame:'יצירת משחק ממוחשב', k_physicalGame:'הפקת משחק מוחשי',
+    crNextTitle:'מה קורה אחר כך?', crStep1:'עוברים למסלול התכנון היצירתי (Smart Sparks), והפרטים שכתבתם כאן כבר ממולאים.', crStep2:'מגדירים מיומנות, מנסחים את שתי המשימות ובודקים את המחוון: 50% להבנת המיומנות ו-50% לעיצוב, להצגה ולשימוש בטכנולוגיה.', crStep3:'מורידים שני קובצי Word: קובץ לתלמיד שמסביר את רכיבי המשימה, ומחוון למורה.',
+    crGo:'מעבר לתכנון היצירתי', crMax:'ניתן לבחור לכל היותר שני סוגים', crNeedKind:'בחרו לפחות סוג אחד למשימה היצירתית', crNeedBasics:'אנא מלאו קודם כיתה, מקצוע ונושא', claudeBtn:'העתק ופתח את Claude',
     platformTitle:'הפלטפורמה החכמה להערכה חלופית',
     platformOwner:'אתר אישי של המורה מונא מוסטפא',
     welcomeText:'ברוכים הבאים, מורים יקרים 💗\nבואו נבנה יחד מטלת הערכה חלופית מעולה לתלמידיכם!',
@@ -654,6 +727,11 @@ const T = {
     copied:'הועתק בהצלחה ✓', fillFields:'אנא מלא את השדות הנדרשים', shareHint:'איך לשתף את התוצאה עם תלמידים?', shareHintDesc:'העתק פרומפט ← פתח כלי AI ← קבל את הדף האינטראקטיבי ← שתף קישור או קובץ עם תלמידיך.',
   },
   en: {
+    pathTitle:'Assessment type', pathGenName:'General (quantitative)', pathGenDesc:'Worksheet, research, experiment. You get a ready prompt to take to Claude to build a computer-based task with a score.', pathCrName:'Creative assessment', pathCrDesc:'Presentation, poster, video, podcast, interview, model, game. Plan the task step by step and get a student file and a teacher marking key.',
+    crTypesTitle:'Creative task type', crTypesNote:'Pick two types: the student will choose between two tasks that assess the same skill. You can change them later.',
+    k_presentation:'Presentation', k_poster:'Poster display', k_video:'Video production', k_podcast:'Podcast', k_interview:'Interview role-play', k_model:'Explanatory model', k_digitalGame:'Digital game', k_physicalGame:'Hands-on game',
+    crNextTitle:'What happens next?', crStep1:'You move to the creative planning path (Smart Sparks), with the details you entered here already filled in.', crStep2:'You set the skill, write the two tasks and review the guide: 50% for understanding the skill, 50% for form, delivery and use of technology.', crStep3:'You download two Word files: a student file explaining the task components, and a teacher marking key.',
+    crGo:'Go to creative planning', crMax:'You can pick at most two types', crNeedKind:'Pick at least one creative task type', crNeedBasics:'Please fill in grade, subject and topic first', claudeBtn:'Copy prompt & open Claude',
     platformTitle:'Smart Alternative Assessment Platform',
     platformOwner:'Personal site of Teacher Muna Mustafa',
     welcomeText:"Welcome, dear teachers 💗\nLet's build an amazing alternative assessment task for your students together!",
@@ -759,6 +837,9 @@ document.addEventListener('click', function(e) {
     input.checked = true; pill.classList.add('selected');
     if (name === 'atype') document.getElementById('simulationSection').style.display = input.value==='worksheet' ? 'block' : 'none';
   } else {
+    if (input.name === 'crkind' && !input.checked && document.querySelectorAll('input[name="crkind"]:checked').length >= 2) {
+      showToast(T[currentLang].crMax, true); e.preventDefault(); return;
+    }
     input.checked = !input.checked;
     pill.classList.toggle('selected', input.checked);
   }
@@ -818,6 +899,47 @@ function getLogoInstruction(lang, hasLogo, munaLogoUrl) {
       return baseEN + '\n  • REST: page title, subject/topic name, and teacher name\n  • No school logo or placeholder on the right side';
     }
   }
+}
+
+// ── ASSESSMENT PATH: general (prompt → Claude) or creative (→ Smart Sparks planner) ──
+const PLANNER_URL = 'https://munakanaanih-sys.github.io/reative-alternative-assessment/';
+let currentPath = '';
+function setPath(path) {
+  currentPath = path;
+  document.getElementById('pathGeneral').classList.toggle('selected', path === 'general');
+  document.getElementById('pathCreative').classList.toggle('selected', path === 'creative');
+  document.getElementById('generalPath').style.display = path === 'general' ? 'block' : 'none';
+  document.getElementById('creativePath').style.display = path === 'creative' ? 'block' : 'none';
+  document.getElementById('sourceBlock').style.display = path === 'creative' ? 'none' : 'block';
+  const target = document.getElementById(path === 'general' ? 'generalPath' : 'creativePath');
+  setTimeout(function() { target.scrollIntoView({behavior:'smooth', block:'start'}); }, 60);
+}
+function goCreative() {
+  const t = T[currentLang];
+  const gradeEl = document.querySelector('input[name="grade"]:checked');
+  const subjEl = document.querySelector('input[name="subj"]:checked');
+  const topic = document.getElementById('topicInput').value.trim();
+  if (!gradeEl || !subjEl || !topic) { showToast(t.crNeedBasics, true); return; }
+  const kinds = Array.from(document.querySelectorAll('input[name="crkind"]:checked')).map(x => x.value);
+  if (!kinds.length) { showToast(t.crNeedKind, true); return; }
+  // grade/subject as the teacher sees them in the interface language
+  const gradeLbl = gradeEl.closest('.pill').textContent.trim();
+  const subjLbl = subjEl.closest('.pill').textContent.replace(/^[^\p{L}]+/u, '').trim();
+  const payload = {
+    source: 'muna-assess-mate', v: 2,
+    subject: subjLbl, grade: gradeLbl, unit: topic,
+    coordinator: document.getElementById('teacherName').value.trim(),
+    kinds: kinds.slice(0, 2)
+  };
+  window.location.href = PLANNER_URL + '#import=' + encodeURIComponent(JSON.stringify(payload));
+}
+function copyAndOpenClaude() {
+  const text = document.getElementById('promptText').textContent;
+  const w = window.open('https://claude.ai/new', '_blank');
+  const ok = function() { showToast(T[currentLang].copied); };
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(ok).catch(function() { fallbackCopy(text); });
+  else fallbackCopy(text);
+  if (!w) showToast(T[currentLang].copied);
 }
 
 // ── BUILD PROMPT ──────────────────────────────────────────────────────────────
@@ -997,7 +1119,7 @@ function shareVia(m) {
 let qrDone = false;
 function generateQR(url) {
   if (qrDone) return; qrDone = true;
-  const d = document.getElementById('qrcode'); d.innerHTML = '';
+  const d = document.getElementById('qrcode'); if (!d || typeof QRCode === 'undefined') return; d.innerHTML = '';
   new QRCode(d, {text:url, width:140, height:140, colorDark:'#5b4fcf', colorLight:'#ffffff'});
 }
 
