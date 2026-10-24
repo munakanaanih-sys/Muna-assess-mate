@@ -277,6 +277,7 @@
   }
   body.lang-en .prompt-box { direction: ltr; text-align: left; }
   .action-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .paste-hint { margin-top: 14px; padding: 10px 14px; border-radius: 12px; background: #f3f1ff; border: 1px dashed #c9c2f5; font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; }
   .ai-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; align-items: center; }
   .ai-link {
     display: inline-flex; align-items: center; gap: 5px;
@@ -630,17 +631,17 @@
     <div class="action-row">
       <button class="btn-claude" onclick="copyAndOpenClaude()">🤖 <span data-t="claudeBtn">انسخ البرومبت وافتح Claude</span></button>
       <button class="btn-secondary" onclick="copyPrompt()">📋 <span data-t="copyBtn">نسخ البرومبت</span></button>
-      <button class="btn-secondary" onclick="downloadPrompt()">⬇ <span data-t="downloadBtn">تحميل ملف الطالب</span></button>
 
     </div>
+    <div class="paste-hint" data-t="pasteHint">انسخ البرومبت، ثم افتح أداة الذكاء الاصطناعي، والصق البرومبت (Ctrl+V) وأرسله لتحصل على المهمة المطلوبة. الأزرار التالية تنسخ البرومبت تلقائياً وتفتح الأداة.</div>
     <div class="ai-links">
       <span style="font-size:0.82rem;color:var(--text-muted);" data-t="sendTo">📍 انقل البرومبت إلى:</span>
-      <a class="ai-link" href="https://claude.ai" target="_blank">🤖 Claude AI</a>
-      <a class="ai-link" href="https://chat.openai.com" target="_blank">💬 ChatGPT</a>
-      <a class="ai-link" href="https://gemini.google.com" target="_blank">✨ Gemini</a>
-      <a class="ai-link" href="https://copilot.microsoft.com" target="_blank">🔷 Copilot</a>
-      <a class="ai-link" href="https://v0.dev" target="_blank">⚡ v0.dev</a>
-      <a class="ai-link" href="https://bolt.new" target="_blank">🔩 Bolt.new</a>
+      <a class="ai-link" href="https://claude.ai/new" target="_blank" rel="noopener" onclick="copyPrompt()">🤖 Claude AI</a>
+      <a class="ai-link" href="https://chat.openai.com" target="_blank" rel="noopener" onclick="copyPrompt()">💬 ChatGPT</a>
+      <a class="ai-link" href="https://gemini.google.com" target="_blank" rel="noopener" onclick="copyPrompt()">✨ Gemini</a>
+      <a class="ai-link" href="https://copilot.microsoft.com" target="_blank" rel="noopener" onclick="copyPrompt()">🔷 Copilot</a>
+      <a class="ai-link" href="https://v0.dev" target="_blank" rel="noopener" onclick="copyPrompt()">⚡ v0.dev</a>
+      <a class="ai-link" href="https://bolt.new" target="_blank" rel="noopener" onclick="copyPrompt()">🔩 Bolt.new</a>
     </div>
   </div>
   </div><!-- /generalPath -->
@@ -686,7 +687,7 @@ const T = {
     buildBtn:'ابنِ البرومبت الذكي لي',
     resultTitle:'⭐ البرومبت الذكي الجاهز',
     copyBtn:'نسخ البرومبت', downloadBtn:'تحميل ملف الطالب', shareBtn:'مشاركة مع الطلاب',
-    sendTo:'📍 انقل البرومبت إلى:',
+    sendTo:'📍 انقل البرومبت إلى:', pasteHint:'انسخ البرومبت، ثم افتح أداة الذكاء الاصطناعي، والصق البرومبت (Ctrl+V) وأرسله لتحصل على المهمة المطلوبة. الأزرار التالية تنسخ البرومبت تلقائياً وتفتح الأداة.',
     shareTitle:'مشاركة المهمة مع الطلاب', shareEmail:'إيميل', qrTitle:'امسح الـ QR لفتح المهمة مباشرة',
     copied:'تم النسخ بنجاح ✓', fillFields:'الرجاء ملء الحقول المطلوبة (الصف، المادة، الموضوع، نوع التقييم)', shareHint:'كيف تشارك النتيجة مع طلابك؟', shareHintDesc:'انسخ البرومبت ← افتح أي أداة ذكاء اصطناعي ← احصل على الصفحة التفاعلية ← شارك الرابط أو الملف مع طلابك مباشرة.',
   },
@@ -722,7 +723,7 @@ const T = {
     buildBtn:'בנה לי פרומפט חכם ✨',
     resultTitle:'⭐ הפרומפט מוכן',
     copyBtn:'העתק', downloadBtn:'הורד קובץ', shareBtn:'שתף',
-    sendTo:'📍 שלח פרומפט ל:',
+    sendTo:'📍 שלח פרומפט ל:', pasteHint:'העתיקו את הפרומפט, פתחו את כלי הבינה המלאכותית, הדביקו (Ctrl+V) ושלחו כדי לקבל את המשימה. הכפתורים הבאים מעתיקים את הפרומפט אוטומטית ופותחים את הכלי.',
     shareTitle:'שיתוף עם תלמידים', shareEmail:'אימייל', qrTitle:'סרוק QR לפתיחת המטלה',
     copied:'הועתק בהצלחה ✓', fillFields:'אנא מלא את השדות הנדרשים', shareHint:'איך לשתף את התוצאה עם תלמידים?', shareHintDesc:'העתק פרומפט ← פתח כלי AI ← קבל את הדף האינטראקטיבי ← שתף קישור או קובץ עם תלמידיך.',
   },
@@ -758,7 +759,7 @@ const T = {
     buildBtn:'Build My Smart Prompt ✨',
     resultTitle:'⭐ Your Smart Prompt is Ready',
     copyBtn:'Copy', downloadBtn:'Download', shareBtn:'Share',
-    sendTo:'📍 Send prompt to:',
+    sendTo:'📍 Send prompt to:', pasteHint:'Copy the prompt, open the AI tool, paste it (Ctrl+V) and send it to get the task. The buttons below copy the prompt automatically and open the tool.',
     shareTitle:'Share with Students', shareEmail:'Email', qrTitle:'Scan QR to open task',
     copied:'Copied ✓', fillFields:'Please fill required fields (grade, subject, topic, type)', shareHint:'How to share the result with students?', shareHintDesc:'Copy the prompt → open any AI tool → get the interactive page → share the link or file directly with your students.',
   }
