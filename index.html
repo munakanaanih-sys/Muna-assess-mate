@@ -549,7 +549,7 @@
         <div class="cr-steps-title" data-t="crNextTitle">ماذا سيحدث بعد ذلك؟</div>
         <ol>
           <li data-t="crStep1">تنتقل إلى مسار التخطيط الإبداعي (ومضات)، والبيانات التي كتبتها هنا معبّأة مسبقًا.</li>
-          <li data-t="crStep2">تحدد المهارة، تصوغ المهمتين، وتراجع مرشد التصحيح: 50% لفهم المهارة، و50% للشكل والتقديم واستخدام التكنولوجيا.</li>
+          <li data-t="crStep2">تحدد المهارة، تصوغ المهمتين، وتراجع مرشد التصحيح: 60% لفهم المهارة و40% للشكل والتقديم واستخدام التكنولوجيا (افتراضيًا)، مع إمكانية اختيار 50/50.</li>
           <li data-t="crStep3">تنزّل ملفَي Word: ملف للطالب يشرح مركّبات المهمة، ومفتاح تصحيح للمعلم.</li>
         </ol>
       </div>
@@ -658,7 +658,7 @@ const T = {
     pathTitle:'نوع التقييم', pathGenName:'تقييم عام (كمّي)', pathGenDesc:'ورقة عمل، بحث علمي، تجربة علمية. تحصل على برومبت جاهز تنقله إلى Claude لإنشاء مهمة محوسبة بعلامة.', pathCrName:'تقييم إبداعي', pathCrDesc:'عرض، عارضة، فيديو، بودكاست، مقابلة، مجسم، لعبة. تخطّط المهمة خطوة بخطوة وتحصل على ملف للطالب ومفتاح تصحيح للمعلم.',
     crTypesTitle:'نوع المهمة الإبداعية', crTypesNote:'اختر نوعين: الطالب سيختار بين مهمتين تفحصان المهارة نفسها. يمكنك تغييرهما لاحقًا.',
     k_presentation:'تقديم وعرض', k_poster:'عارضة', k_video:'إنشاء فيديو', k_podcast:'بودكاست', k_interview:'تمثيل مقابلة', k_model:'بناء مجسم توضيحي', k_digitalGame:'إنشاء لعبة محوسبة', k_physicalGame:'إنتاج لعبة عملية',
-    crNextTitle:'ماذا سيحدث بعد ذلك؟', crStep1:'تنتقل إلى مسار التخطيط الإبداعي (ومضات)، والبيانات التي كتبتها هنا معبّأة مسبقًا.', crStep2:'تحدد المهارة، تصوغ المهمتين، وتراجع مرشد التصحيح: 50% لفهم المهارة، و50% للشكل والتقديم واستخدام التكنولوجيا.', crStep3:'تنزّل ملفَي Word: ملف للطالب يشرح مركّبات المهمة، ومفتاح تصحيح للمعلم.',
+    crNextTitle:'ماذا سيحدث بعد ذلك؟', crStep1:'تنتقل إلى مسار التخطيط الإبداعي (ومضات)، والبيانات التي كتبتها هنا معبّأة مسبقًا.', crStep2:'تحدد المهارة، تصوغ المهمتين، وتراجع مرشد التصحيح: 60% لفهم المهارة و40% للشكل والتقديم واستخدام التكنولوجيا (افتراضيًا)، مع إمكانية اختيار 50/50.', crStep3:'تنزّل ملفَي Word: ملف للطالب يشرح مركّبات المهمة، ومفتاح تصحيح للمعلم.',
     crGo:'انتقل إلى التخطيط الإبداعي', crMax:'يمكن اختيار نوعين على الأكثر', crNeedKind:'اختر نوعًا واحدًا على الأقل للمهمة الإبداعية', crNeedBasics:'الرجاء ملء الصف والمادة والموضوع أولًا', claudeBtn:'انسخ البرومبت وافتح Claude',
     platformTitle:'المنصة الذكية للتقييم البديل',
     platformOwner:'موقع خاص بالمعلمة منى مصطفى',
@@ -694,7 +694,7 @@ const T = {
     pathTitle:'סוג ההערכה', pathGenName:'הערכה כללית (כמותית)', pathGenDesc:'דף עבודה, מחקר מדעי, ניסוי מדעי. מקבלים פרומפט מוכן להעברה ל-Claude ליצירת משימה ממוחשבת עם ציון.', pathCrName:'הערכה יצירתית', pathCrDesc:'מצגת, תצוגה, סרטון, פודקאסט, ראיון, מודל, משחק. מתכננים את המשימה שלב אחר שלב ומקבלים קובץ לתלמיד ומחוון למורה.',
     crTypesTitle:'סוג המשימה היצירתית', crTypesNote:'בחרו שני סוגים: התלמיד יבחר בין שתי משימות שבודקות את אותה מיומנות. ניתן לשנות אותם בהמשך.',
     k_presentation:'הצגה ומצגת', k_poster:'תצוגה (פוסטר)', k_video:'יצירת סרטון', k_podcast:'פודקאסט', k_interview:'המחזת ראיון', k_model:'בניית מודל המחשה', k_digitalGame:'יצירת משחק ממוחשב', k_physicalGame:'הפקת משחק מוחשי',
-    crNextTitle:'מה קורה אחר כך?', crStep1:'עוברים למסלול התכנון היצירתי (Smart Sparks), והפרטים שכתבתם כאן כבר ממולאים.', crStep2:'מגדירים מיומנות, מנסחים את שתי המשימות ובודקים את המחוון: 50% להבנת המיומנות ו-50% לעיצוב, להצגה ולשימוש בטכנולוגיה.', crStep3:'מורידים שני קובצי Word: קובץ לתלמיד שמסביר את רכיבי המשימה, ומחוון למורה.',
+    crNextTitle:'מה קורה אחר כך?', crStep1:'עוברים למסלול התכנון היצירתי (Smart Sparks), והפרטים שכתבתם כאן כבר ממולאים.', crStep2:'מגדירים מיומנות, מנסחים את שתי המשימות ובודקים את המחוון: 60% להבנת המיומנות ו-40% לעיצוב, להצגה ולשימוש בטכנולוגיה (ברירת מחדל), עם אפשרות לבחור 50/50.', crStep3:'מורידים שני קובצי Word: קובץ לתלמיד שמסביר את רכיבי המשימה, ומחוון למורה.',
     crGo:'מעבר לתכנון היצירתי', crMax:'ניתן לבחור לכל היותר שני סוגים', crNeedKind:'בחרו לפחות סוג אחד למשימה היצירתית', crNeedBasics:'אנא מלאו קודם כיתה, מקצוע ונושא', claudeBtn:'העתק ופתח את Claude',
     platformTitle:'הפלטפורמה החכמה להערכה חלופית',
     platformOwner:'אתר אישי של המורה מונא מוסטפא',
@@ -730,7 +730,7 @@ const T = {
     pathTitle:'Assessment type', pathGenName:'General (quantitative)', pathGenDesc:'Worksheet, research, experiment. You get a ready prompt to take to Claude to build a computer-based task with a score.', pathCrName:'Creative assessment', pathCrDesc:'Presentation, poster, video, podcast, interview, model, game. Plan the task step by step and get a student file and a teacher marking key.',
     crTypesTitle:'Creative task type', crTypesNote:'Pick two types: the student will choose between two tasks that assess the same skill. You can change them later.',
     k_presentation:'Presentation', k_poster:'Poster display', k_video:'Video production', k_podcast:'Podcast', k_interview:'Interview role-play', k_model:'Explanatory model', k_digitalGame:'Digital game', k_physicalGame:'Hands-on game',
-    crNextTitle:'What happens next?', crStep1:'You move to the creative planning path (Smart Sparks), with the details you entered here already filled in.', crStep2:'You set the skill, write the two tasks and review the guide: 50% for understanding the skill, 50% for form, delivery and use of technology.', crStep3:'You download two Word files: a student file explaining the task components, and a teacher marking key.',
+    crNextTitle:'What happens next?', crStep1:'You move to the creative planning path (Smart Sparks), with the details you entered here already filled in.', crStep2:'You set the skill, write the two tasks and review the guide: 60% for understanding the skill and 40% for form, delivery and use of technology (default), with an option to choose 50/50.', crStep3:'You download two Word files: a student file explaining the task components, and a teacher marking key.',
     crGo:'Go to creative planning', crMax:'You can pick at most two types', crNeedKind:'Pick at least one creative task type', crNeedBasics:'Please fill in grade, subject and topic first', claudeBtn:'Copy prompt & open Claude',
     platformTitle:'Smart Alternative Assessment Platform',
     platformOwner:'Personal site of Teacher Muna Mustafa',
